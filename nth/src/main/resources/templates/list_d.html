@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<link rel="stylesheet" type="text/css" th:href="@{/style.css}" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<span th:if="${question.author != null}" th:text="${question.author.username}"></span>
+<h1 th:text="${question.subject}"></h1>
+<div th:text="${question.content}"> </div>
+<h5 th:text="|${#lists.size(question.answerList)}개의 답변이 있습니다.|"></h5>
+<div>
+    <ul>
+        <li th:each="answer : ${question.answerList}">
+            <span>글쓴이: </span>
+            <span th:if="${answer.author != null}" th:text="${answer.author.username}"></span>
+            <span th:unless="${answer.author != null}">작성자 없음</span>
+            <span th:text="${answer.content}"></span>
+        </li>
+    </ul>
+</div>
+<div>
+    <!--정상작동 어드민접근 불가능 기본만 본인만 접근가능-->
+    <a th:href="@{|question/modify/${question.id}|}"
+       sec:authorize="isAuthenticated()"
+       th:if="${question.author != null and #authentication.getPrincipal().getUsername() == question.author.username}"
+       th:text="수정"></a>
+    <!--정상작동 어드민접근 불가능 기본만 본인만 접근가능-->
+
+    <!--
+    <a th:href="@{|question/modify/${question.id}|}"
+       sec:authorize="isAuthenticated() and hasAuthority('ROLE_ADMIN')"
+       th:text="수정">
+    </a>
+
+-->
+<!--
+    <a th:href="@{|question/modify/${question.id}|}"
+       sec:authorize="(hasAuthority('ROLE_ADMIN') or #authentication.principal.username == question.author.username)"
+       th:text="수정">
+    </a>
+    -->
+    <!--
+
+        <a th:href="@{|question/modify/${question.id}|}"
+        sec:authorize="isAuthenticated()"
+           th:if="${question.author != null and #authentication.getPrincipal().getUsername() == question.author
+           .username or hasAuthority('ROLE_ADMIN') }" th:text="수정">
+        </a>
+
+        -->
+
+    <a th:href="@{|question/delete/${question.id}|}"
+       sec:authorize="isAuthenticated()"
+       th:if="${question.author != null and #authentication.getPrincipal().getUsername() == question.author
+       .username}" th:text="삭제">
+    </a>
+
+
+</div>
+
+<form th:action="@{|/question/create/${question.id}|}" th:object="${
+answerForm}" method="post" class="my-3">
+    <textarea name="content" id="content" rows="15"></textarea>
+    <input type="submit" value="답변등록">
+</form>
+
+</body>
+</html>
