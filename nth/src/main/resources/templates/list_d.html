@@ -25,51 +25,60 @@
     </ul>
 </div>
 <div>
-    <!--정상작동 어드민접근 불가능 기본만 본인만 접근가능-->
-    <a th:href="@{|question/modify/${question.id}|}"
-       sec:authorize="isAuthenticated() or (question.author != null and #authentication.getPrincipal().getUsername() == question.author.username) "
-       th:if="#{hasAuthority('ROLE_ADMIN')}"
-       th:text="수정"></a>
 
-
-    <!--정상작동 어드민접근 불가능 기본만 본인만 접근가능-->
     <!--
-    <a th:href="@{|question/modify/${question.id}|}"
-       sec:authorize="isAuthenticated() and hasAuthority('ROLE_ADMIN')"
-       th:text="수정">
-    </a>
+    <th:block th:fragment="autoUpdateLink" th:remove="tag">
+        <a th:href="@{|question/modify/${question.id}|}" th:text="자동수정"></a>
+    </th:block>
 
+    본인에게만 접근 가능한 경우
+    <th:block th:if="${question.author != null and #authentication.getPrincipal().getUsername() == question.author.username}">
+        <a th:replace="fragments::autoUpdateLink"
+           sec:authorize="isAuthenticated() and hasAuthority('ROLE_USER')"></a>
+    </th:block>
+
+    어드민만 접근 가능한 경우
+    <th:block th:if="${#authorization.hasAuthority('ROLE_ADMIN')}">
+        <a th:replace="fragments::autoUpdateLink"
+           sec:authorize="isAuthenticated() and hasAuthority('ROLE_ADMIN')"></a>
+    </th:block>
 -->
-<!--
-    <a th:href="@{|question/modify/${question.id}|}"
-       sec:authorize="(hasAuthority('ROLE_ADMIN') or #authentication.principal.username == question.author.username)"
-       th:text="수정">
-    </a>
-    -->
-    <!--
 
-        <a th:href="@{|question/modify/${question.id}|}"
-        sec:authorize="isAuthenticated()"
-           th:if="${question.author != null and #authentication.getPrincipal().getUsername() == question.author
-           .username or hasAuthority('ROLE_ADMIN') }" th:text="수정">
-        </a>
-
-        -->
-
-    <a th:href="@{|question/delete/${question.id}|}"
-       sec:authorize="isAuthenticated()"
+    <!--본인에게만 접근이 가능함 -->
+    <a th:href="@{|/question/modify/${question.id}|}" th:text="수정"
+       sec:authorize="isAuthenticated() and hasAuthority('ROLE_USER')"
        th:if="${question.author != null and #authentication.getPrincipal().getUsername() == question.author
-       .username}" th:text="삭제">
+           .username}">
     </a>
 
+    <!-- 어드민만 접근가능 -->
+    <a th:href="@{|/question/modify/${question.id}|}" th:text="수정"
+       sec:authorize="isAuthenticated() and hasAuthority('ROLE_ADMIN')">
+    </a>
+
+
+
+
+    <!--본인에게만 접근이 가능함 -->
+    <a th:href="@{|/question/delete/${question.id}|}" th:text="삭제"
+       sec:authorize="isAuthenticated() and hasAuthority('ROLE_USER')"
+       th:if="${question.author != null and #authentication.getPrincipal().getUsername() == question.author
+       .username}" >
+    </a>
+
+    <!-- 어드민만 접근가능 /|question/delete/{id}"-->
+    <a th:href="@{|/question/delete/${question.id}|}" th:text="삭제"
+       sec:authorize="isAuthenticated() and hasAnyAuthority('ROLE_ADMIN')">
+    </a>
 
 </div>
 
-<form th:action="@{|/question/create/${question.id}|}" th:object="${
-answerForm}" method="post" class="my-3">
+
+<form th:action="@{|/question/create/${question.id}|}" th:object="${answerForm}" method="post" class="my-3">
     <textarea name="content" id="content" rows="15"></textarea>
     <input type="submit" value="답변등록">
 </form>
+
 
 </body>
 </html>
