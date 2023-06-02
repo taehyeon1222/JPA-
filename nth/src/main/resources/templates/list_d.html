@@ -27,11 +27,12 @@
 <div>
     <!--정상작동 어드민접근 불가능 기본만 본인만 접근가능-->
     <a th:href="@{|question/modify/${question.id}|}"
-       sec:authorize="isAuthenticated()"
-       th:if="${question.author != null and #authentication.getPrincipal().getUsername() == question.author.username}"
+       sec:authorize="isAuthenticated() or (question.author != null and #authentication.getPrincipal().getUsername() == question.author.username) "
+       th:if="#{hasAuthority('ROLE_ADMIN')}"
        th:text="수정"></a>
-    <!--정상작동 어드민접근 불가능 기본만 본인만 접근가능-->
 
+
+    <!--정상작동 어드민접근 불가능 기본만 본인만 접근가능-->
     <!--
     <a th:href="@{|question/modify/${question.id}|}"
        sec:authorize="isAuthenticated() and hasAuthority('ROLE_ADMIN')"
