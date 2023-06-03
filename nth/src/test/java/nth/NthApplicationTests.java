@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -38,6 +39,7 @@ class NthApplicationTests {
 		assertEquals(101,q2.getId());
 	}
 
+	/*
 	@Test
 	void test3(){
 		for(int i = 1; i<300; i++){
@@ -46,6 +48,20 @@ class NthApplicationTests {
 			this.questionService.create(subject1,content1);
 		}
 	}
+*/
 
+	@Test
+	void test3(){
+	String randomId = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+	String result = ""; //
+	Random random = new Random(); //
+        for(int i = 0; i < 5; i++) {
+		int randomIndex = random.nextInt(randomId.length()); //
+		char randomChar = randomId.charAt(randomIndex);
+		result = result + randomChar; //
+	}
+
+        System.out.println(result);
+}
 
 }

@@ -26,6 +26,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Random;
 import java.util.zip.DataFormatException;
 
 @Controller
@@ -42,9 +43,9 @@ public class QuestionController {
     public String list(Model model, @RequestParam(value = "page",defaultValue = "0")
             int page)
     {
+        //개발전 단계
         Page<Question> paging = this.questionService.getList(page);
         model.addAttribute("paging",paging);
-
         //List<Question> questionList = this.questionService.getList();
         //model.addAttribute("questionList", questionList);
         return "list";
@@ -173,13 +174,29 @@ public class QuestionController {
 
          //추천버튼
          @GetMapping("question/detail/question/vote/{id}")
-         public String qestionVote(HttpServletRequest request, Principal principal, @PathVariable("id") long id
-                                   ){
+         public String qestionVote(Principal principal, @PathVariable("id") long id){
         Question question = this.questionService.getQuestion(id);
         UserInfo userInfo = this.userInfoService.getUser(principal.getName());
         this.questionService.vote(question,userInfo);
         return  String.format("redirect:/question/detail/%s",id);
          }
+
+
+         //랜덤 userID 문자열 반환
+        public String randomUserIdCreate(){
+        String randomId = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        String result = ""; //
+        Random random = new Random(); //
+        for(int i = 0; i < 5; i++) {
+            int randomIndex = random.nextInt(randomId.length()); //
+            char randomChar = randomId.charAt(randomIndex);
+            result = result + randomChar; //
+        }
+
+        System.out.println(result);
+        return result;
+    }
+
 
  }
 
