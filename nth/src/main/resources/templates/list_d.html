@@ -26,6 +26,12 @@
 </div>
 <div>
 
+    <a th:href="@{|question/vote/${question.id}|}"
+       th:text="${#lists.size(question.voter)}">
+    </a>
+</div>
+<div>
+
     <!--
     <th:block th:fragment="autoUpdateLink" th:remove="tag">
         <a th:href="@{|question/modify/${question.id}|}" th:text="자동수정"></a>

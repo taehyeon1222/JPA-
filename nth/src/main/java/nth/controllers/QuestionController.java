@@ -1,5 +1,7 @@
 package nth.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -169,6 +171,15 @@ public class QuestionController {
         return "redirect:/";
          }
 
+         //추천버튼
+         @GetMapping("question/detail/question/vote/{id}")
+         public String qestionVote(HttpServletRequest request, Principal principal, @PathVariable("id") long id
+                                   ){
+        Question question = this.questionService.getQuestion(id);
+        UserInfo userInfo = this.userInfoService.getUser(principal.getName());
+        this.questionService.vote(question,userInfo);
+        return  String.format("redirect:/question/detail/%s",id);
+         }
 
  }
 

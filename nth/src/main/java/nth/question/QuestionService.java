@@ -89,4 +89,10 @@ public class QuestionService {
         this.questionRepository.delete(question);
     }
 
+    public void vote(Question question, UserInfo userInfo){
+        question.getVoter().add(userInfo);
+        this.questionRepository.save(question);
+
+    }
+
 }
