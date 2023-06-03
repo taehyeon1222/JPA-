@@ -155,6 +155,13 @@ public class QuestionController {
     @GetMapping("/question/delete/{id}")
     public String questionDelete(Principal principal,@PathVariable("id") long id){
             Question question = this.questionService.getQuestion(id);
+        if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated() &&
+                SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains
+                        (new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            System.out.println("어드민 권한이 발생함");
+            this.questionService.delete(question);
+            return "redirect:/";
+        }
             if(!question.getAuthor().getUsername().equals(principal.getName())){
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"삭제권한이 없습니다.");
             }
