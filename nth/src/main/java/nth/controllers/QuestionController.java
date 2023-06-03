@@ -112,6 +112,7 @@ public class QuestionController {
            // throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"관리자권한입니다.");
         }
         if(!question.getAuthor().getUsername().equals(principal.getName())){
+            //비정상적인 경로로 들어올 경우 유저 이름검사
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"수정권한 이없습니다.");
         }
         questionForm.setSubject(question.getSubject());
@@ -132,7 +133,6 @@ public class QuestionController {
                 SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains
                         (new SimpleGrantedAuthority("ROLE_ADMIN"))) {
             System.out.println("어드민 권한이 발생함");
-
             this.questionService.modify(question, questionForm.getSubject(),
                     questionForm.getContent());
             return String.format("redirect:/question/detail/%s",id);
