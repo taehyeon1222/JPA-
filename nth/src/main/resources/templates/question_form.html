@@ -21,11 +21,11 @@
 </div>
         <div class="mb-3">
             제목
-            <input type="text" name="subject" id="subject" class="form-control">
+            <input type="text" name="subject" id="subject" th:field="*{subject}" class="form-control">
         </div>
         <div class="mb-3">
             내용
-            <textarea name="content" id="content" class="form-control">
+            <textarea name="content" id="content" th:field="*{content}" class="form-control">
 
             </textarea>
         </div>
