@@ -12,7 +12,7 @@
             <input type="hidden" name="${_csrf.parameterName}" th:value="${_csrf.token}">
     -->
 
-    <form th:action="@{/question/create}" th:object="${questionForm}" method="POST">
+    <form th:object="${questionForm}" method="POST">
          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
     <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">

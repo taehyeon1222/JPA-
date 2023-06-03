@@ -18,17 +18,17 @@ public class UserInfoService {
 
     private final PasswordEncoder passwordEncoder;
 
-    public UserInfo create(String username,String password,String email){
-
+    public UserInfo create(String username,String password,String email,String nickname){
         UserInfo user = new UserInfo();
-
         user.setUsername(username);
         user.setEmail(email);
+        user.setNickname(nickname);
         //BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         user.setPassword(passwordEncoder.encode(password));
        // user.setCreatDate(LocalDateTime.now()); // 나중에 변경해야함
         this.userInfoRepository.save(user);
         return user;
+
     }
 
     public UserInfo getUser(String username){

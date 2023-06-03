@@ -40,14 +40,31 @@ public class QuestionController {
     private final UserInfoService userInfoService;
 
     @GetMapping("/list")
-    public String list(Model model, @RequestParam(value = "page",defaultValue = "0")
+    public String list(HttpServletRequest request,Principal principal,Model model, @RequestParam(value = "page",defaultValue = "0")
             int page)
     {
-        //개발전 단계
+        /*
+        String userId;
+        if (principal != null) {
+            userId = principal.getName();
+        } else {
+            HttpSession session = request.getSession();
+            userId = (String) session.getAttribute("userId");
+            if (userId == null) {
+                // 세션에 익명 사용자 아이디 생성 및 저장
+                userId = randomUserIdCreate();
+                session.setAttribute("userId", userId);
+            }
+        }
+          model.addAttribute("UserInfo", userId);
+        model.addAttribute("userId", userId); // userId를 먼저 추가
+        */
         Page<Question> paging = this.questionService.getList(page);
-        model.addAttribute("paging",paging);
-        //List<Question> questionList = this.questionService.getList();
-        //model.addAttribute("questionList", questionList);
+        model.addAttribute("paging", paging); // paging 추가
+        if(principal != null) {
+            UserInfo userInfo = this.userInfoService.getUser(principal.getName());
+            model.addAttribute("UserInfo", userInfo);
+        }
         return "list";
     }
 

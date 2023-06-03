@@ -6,16 +6,19 @@
 >
 
 <div class="container my-3">
-    <span sec:authorize="isAuthenticated()">
-        <span th:text="${#authentication.principal.username}"></span>
-        <span th:each="authority : ${#authentication.principal.authorities}">님 반갑습니다.
-         <span th:text="${authority.authority}">의 권한을 가지고 있습니다.</span>
-        </span>
+   <span sec:authorize="isAuthenticated()">
+    <span th:text="${#authentication.principal.username}"></span>
+    <span th:each="authority : ${#authentication.principal.authorities}">
+        <span th:text="${authority.authority}"></span>
     </span>
-
+</span>
+    <span  sec:authorize="isAuthenticated()"
+            th:text="${UserInfo.nickname}">닉네임없음</span>
     <a sec:authorize="isAnonymous()" th:href="@{/user/login}">로그인</a>
+
     <a sec:authorize="isAuthenticated()" th:href="@{/user/logout}">로그아웃</a>
 </div>
+
     <table class="table">
         <thead class="table-dark">
 

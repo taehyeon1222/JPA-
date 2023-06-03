@@ -10,7 +10,7 @@
     <title>Title</title>
 </head>
 <body>
-<span th:if="${question.author != null}" th:text="${question.author.username}"></span>
+<span th:if="${question.author != null}" th:text="${question.author.username + ' ' + question.author.nickname}">닉네임 없음</span>
 <h1 th:text="${question.subject}"></h1>
 <div th:text="${question.content}"> </div>
 <h5 th:text="|${#lists.size(question.answerList)}개의 답변이 있습니다.|"></h5>

@@ -1,5 +1,7 @@
 package nth.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import nth.answer.Answer;
@@ -50,16 +52,25 @@ public class AnswerController {
 
  */
     //작성자 저장
-        @PostMapping("/question/create/{id}")
+    @PostMapping("/question/create/{id}")
     public String createAnswer(Model model, @PathVariable("id") long id,
                                @Valid AnswerForm answerForm, BindingResult
-                                           bindingResult, Principal principal){
+                                           bindingResult, Principal principal,
+                               HttpServletRequest request){
         UserInfo userInfo = this.userInfoService.getUser(principal.getName());
         Question question = this.questionService.getQuestion(id);
+        HttpSession session = request.getSession();
+        String userId = (String) session.getAttribute("userId");
         if(bindingResult.hasErrors()){
             model.addAttribute("question",question);
             return "list_d";
         }
+        if(principal == null){
+            System.out.println("널");
+            return "list";
+
+        }
+
         //this.answerService.create(question, answerForm.getContent());
         this.answerService.create(question,answerForm.getContent(),userInfo);
             return String.format("redirect:/question/detail/%s",id);

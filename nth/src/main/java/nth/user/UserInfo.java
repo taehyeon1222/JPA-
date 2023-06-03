@@ -20,6 +20,8 @@ public class UserInfo { // 이름 바꿔야함
     @Column(unique = true)
     private String username;
 
+    private String nickname;
+
     @Column(length = 60)
     private String password;
 
