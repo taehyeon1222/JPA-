@@ -41,8 +41,9 @@ public class QuestionController {
 
     @GetMapping("/list")
     public String list(HttpServletRequest request,Principal principal,Model model, @RequestParam(value = "page",defaultValue = "0")
-            int page)
+            int page,@RequestParam(value = "kw",defaultValue = "") String kw)
     {
+
         /*
         String userId;
         if (principal != null) {
@@ -58,9 +59,12 @@ public class QuestionController {
         }
           model.addAttribute("UserInfo", userId);
         model.addAttribute("userId", userId); // userId를 먼저 추가
+        익명아이디 아직 미구현
         */
-        Page<Question> paging = this.questionService.getList(page);
+        Page<Question> paging = this.questionService.getList(page,kw);
         model.addAttribute("paging", paging); // paging 추가
+        model.addAttribute("kw", kw); // 검색기능 추가
+        // 유저 정보를 가져와서 닉네임 추가를 해주기 위함
         if(principal != null) {
             UserInfo userInfo = this.userInfoService.getUser(principal.getName());
             model.addAttribute("UserInfo", userInfo);

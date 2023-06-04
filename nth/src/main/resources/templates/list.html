@@ -19,6 +19,10 @@
     <a sec:authorize="isAuthenticated()" th:href="@{/user/logout}">로그아웃</a>
 </div>
 
+<div>
+
+
+</div>
     <table class="table">
         <thead class="table-dark">
 
@@ -79,6 +83,9 @@
         </ul>
     </div>
     <!-- 페 이 징 처 리 끝 -->
-    <a th:href="@{/question/create}" class="btn btn-primary">질 문 등 록 하 기</a>
+<form th:action="@{/list}" method="get" id="searchForm">
+    <input type="text" id="kw" name="kw" th:value="${kw}">
+    <input type="hidden" id="page" name="page" th:value="${paging.number}">
+</form>
 </div>
 </html>
