@@ -20,6 +20,10 @@
         <input type="text" th:field="*{username}" class="form-control">
     </div>
     <div class="mb-3">
+        <label for="nickname" class="form-label">닉네임</label>
+        <input type="text" th:field="*{nickname}" class="form-control">
+    </div>
+    <div class="mb-3">
         <label for="password1" class="form-label">비 밀 번 호</label>
         <input type="password" th:field="*{password1}" class="form-control">
     </div>
@@ -31,10 +35,7 @@
         <label for="email" class="form-label">이 메 일</label>
         <input type="email" th:field="*{email}" class="form-control">
     </div>
-    <div class="mb-3">
-        <label for="nickname" class="form-label">이 메 일</label>
-        <input type="text" th:field="*{nickname}" class="form-control">
-    </div>
+
     <button type="submit" class="btn btn-primary">회 원 가 입</button>
 </form>
 </html>

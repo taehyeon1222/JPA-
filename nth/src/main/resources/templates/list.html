@@ -2,8 +2,8 @@
 <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}" xmlns:sec="http://www.w3.org/1999/xhtml">
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
->
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 
 <div class="container my-3">
    <span sec:authorize="isAuthenticated()">
@@ -12,16 +12,15 @@
         <span th:text="${authority.authority}"></span>
     </span>
 </span>
+
     <span  sec:authorize="isAuthenticated()"
             th:text="${UserInfo.nickname}">닉네임없음</span>
     <a sec:authorize="isAnonymous()" th:href="@{/user/login}">로그인</a>
-
     <a sec:authorize="isAuthenticated()" th:href="@{/user/logout}">로그아웃</a>
 </div>
 
     <table class="table">
         <thead class="table-dark">
-
         <tr>
             <th>번호</th>
             <th>제 목</th>
@@ -30,6 +29,7 @@
         </tr>
         </thead>
         <tbody>
+
         <tr th:each="question, loop : ${paging}">
             <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index }"></td>
             <td>
@@ -45,12 +45,20 @@
             <td th:text="${#temporals.format(question.createDate,'yy년M월dd일 HH시mm분')}"></td>
         </tr>
         <a th:href="@{question_form}" class="btn btn-primary">작성하기</a>
+        
         </tbody>
     </table>
+
+
     <!-- 페이징 처리-->
     <!-- 페 이 징 처 리 시 작 -->
     <div th:if="${!paging.isEmpty()}">
+
+
         <ul class="pagination justify-content-center">
+            <a class="page-link" th:href="@{|?page=${paging.number*0}|}">
+                <span>맨앞</span></a>
+
             <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
                 <a class="page-link"
                    th:href="@{|?page=${paging.number-1}|}">
@@ -58,11 +66,16 @@
                 </a>
             </li>
 
+
+
             <li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
                 th:if="${page >= paging.number-5 and page <= paging.number+5}"
                 th:classappend="${page == paging.number} ? 'active'"
                 class="page-item">
-                <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
+                <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}">
+                    <a th:text="${page}" class="page-link" th:href="@{|?page=${page}&kw=${kw}|}"></a>
+                </a>
+
             </li>
             <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
                 <a class="page-link" th:href="@{|?page=${paging.number+1}|}">
@@ -73,12 +86,14 @@
                 <a class="page-link" th:href="@{|?page=${paging.totalPages-1}|}">
                     <span>끝</span></a>
             </li>
-            <a class="page-link" th:href="@{|?page=${paging.number*0+1}|}">
-                <span>끝</span></a>
-
         </ul>
     </div>
     <!-- 페 이 징 처 리 끝 -->
-    <a th:href="@{/question/create}" class="btn btn-primary">질 문 등 록 하 기</a>
+
+<form action="/list" method="get">
+    <input type="hidden" name="page" value="0">
+    <input type="text" name="kw" placeholder="검색어를 입력하세요">
+    <input type="submit" value="검색">
+</form>
 </div>
 </html>
