@@ -94,7 +94,7 @@ public class QuestionController {
             return "question_form";
         }
         UserInfo userInfo = this.userInfoService.getUser(principal.getName());
-        this.questionService.create(questionForm.getContent(),questionForm.getSubject(),userInfo);
+        this.questionService.create(questionForm.getSubject(),questionForm.getContent(),userInfo);
         return "redirect:/list";
     }
 
