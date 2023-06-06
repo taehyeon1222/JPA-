@@ -63,6 +63,7 @@
                 th:classappend="${page == paging.number} ? 'active'"
                 class="page-item">
                 <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
+                <a th:text="${page}" class="page-link" th:href="@{|?page=${page}&kw=${kw}|}"></a>
             </li>
             <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
                 <a class="page-link" th:href="@{|?page=${paging.number+1}|}">
@@ -71,6 +72,7 @@
             </li>
             <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
                 <a class="page-link" th:href="@{|?page=${paging.totalPages-1}|}">
+
                     <span>끝</span></a>
             </li>
             <a class="page-link" th:href="@{|?page=${paging.number*0+1}|}">
@@ -78,7 +80,14 @@
 
         </ul>
     </div>
+<form th:action="@{/list}" method="get" id="searchForm">
+    <input type="text" id="kw" name="kw" th:value="${kw}">
+    <input type="hidden" id="page" name="page" th:value="${paging.number}">
+    <input type="submit" value="검색" class="btn btn-primary my-2">
+</form>
     <!-- 페 이 징 처 리 끝 -->
     <a th:href="@{/question/create}" class="btn btn-primary">질 문 등 록 하 기</a>
 </div>
+
+
 </html>
