@@ -15,7 +15,7 @@ public class BookPrice {
 
     private String Price;
 
-    @OneToOne(mappedBy = "bookPrice", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "bookPrice")
     private Book book;
 
 

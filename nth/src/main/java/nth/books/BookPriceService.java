@@ -1,11 +1,8 @@
 package nth.books;
 
 import lombok.RequiredArgsConstructor;
-import nth.question.Question;
-import nth.user.UserInfo;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -17,8 +14,8 @@ public class BookPriceService {
     private final BookRepository bookRepository;
 
 
-    public List<BookPrice> findAll() {
-        return bPRepository.findAll();
+    public List<Book> findAll() {
+        return bookRepository.findAll();
     }
 
     /**

@@ -6,26 +6,30 @@
     <thead>
     <tr>
         <th>Book ID</th>
-        <th>Book Name</th>
-        <th>Price</th>
+        <th>책 이름</th>
+        <th>책 가격</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="bookPrice : ${bookPrices}">
-        <td th:text="${bookPrice.id}"></td>
-        <td th:text="${bookPrice.price}"></td>
+    <tr th:each="book : ${book}">
+        <td th:text="${book.id}"></td>
+        <td th:text="${book.bookName}"></td>
+        <td th:text="${book.bookPrice != null ? book.bookPrice.Price : ''}"></td>
     </tr>
     </tbody>
 </table>
 
 
-<form th:action="@{/admin/create}" method="post">>
-    <div>
-        책이름
-        <input type="text" name="bookName" id="bookName">
-    </div>
+<form th:action="@{/admin}" method="post">
+
+    책이름
+    <input type="text" name="bookName" id="bookName">
+
     가격
     <input type="text" name="bookPrice" id="bookPrice">
+    자격증
+    <input type="text" name="bookPrice" id="bookPrice">
+
     <button type="submit">저장</button>
 </form>
 

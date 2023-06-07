@@ -3,6 +3,9 @@ package nth.books;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import nth.answer.Answer;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -11,7 +14,6 @@ public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-
     private long id;
 
     @Column(unique = true)
@@ -21,8 +23,10 @@ public class Book {
 
     private String link; // 구매연결링크
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "book_price_id")
     private BookPrice bookPrice;
-    //추후 이미지 추가
+
+    @OneToMany(mappedBy = "bookID", cascade = CascadeType.REMOVE)
+    private List<CertificationInfo> certificationInfoList;
 }

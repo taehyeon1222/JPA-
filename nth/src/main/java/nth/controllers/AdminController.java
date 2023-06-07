@@ -2,6 +2,7 @@ package nth.controllers;
 
 
 import lombok.RequiredArgsConstructor;
+import nth.books.Book;
 import nth.books.BookPrice;
 import nth.books.BookPriceService;
 import org.springframework.http.HttpStatus;
@@ -20,19 +21,19 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AdminController {
 
-    private final BookPriceService bookPriceService;
 
+    private final BookPriceService bookService;
 
     @GetMapping  ("/admin")
     public String bookConfigCreate(Model model){
 
-        List<BookPrice> bookPrices = bookPriceService.findAll();
+        List<Book> book = bookService.findAll();
 
         if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated() &&
                 SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains
                         (new SimpleGrantedAuthority("ROLE_ADMIN"))) {
             System.out.println("어드민 권한이 발생함");
-            model.addAttribute("bookPrices", bookPrices);
+            model.addAttribute("book", book); //가격
             return "admin/admin_book_config";
             // throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"관리자권한입니다.");
         }
@@ -40,18 +41,18 @@ public class AdminController {
         //return "admin/admin_book_config";
     }
 
-    @PostMapping ("/admin/create")
+    @PostMapping ("/admin")
     public String bookConfigCreate(@RequestParam("bookPrice") String bookPrice,
                                    @RequestParam("bookName") String bookName ){
         if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated() &&
                 SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains
                         (new SimpleGrantedAuthority("ROLE_ADMIN"))) {
-            bookPriceService.create(bookName, bookPrice);
+            bookService.create(bookName, bookPrice);
             System.out.println("어드민 권한이 발생함");
-            return "admin/admin_book_config";
+            return "redirect:/admin";
             // throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"관리자권한입니다.");
         }
-        return "admin/admin_book_config";
+        return "list";
     }
 
 

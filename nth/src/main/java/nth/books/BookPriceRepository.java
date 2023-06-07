@@ -9,7 +9,6 @@ import java.util.List;
 
 public interface BookPriceRepository extends JpaRepository<BookPrice,Long> {
 
-    //List<BookPrice> findByBook_BookName(String bookName);
-
+    List<BookPrice> findByBook_BookName(String bookName);
 
 }
