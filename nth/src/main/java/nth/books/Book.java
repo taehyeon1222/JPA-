@@ -23,9 +23,7 @@ public class Book {
 
     private String link; // 구매연결링크
 
-    @OneToOne(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "book_price_id")
-    private BookPrice bookPrice;
+    private String Price;
 
     @OneToMany(mappedBy = "bookID", cascade = CascadeType.REMOVE)
     private List<CertificationInfo> certificationInfoList;

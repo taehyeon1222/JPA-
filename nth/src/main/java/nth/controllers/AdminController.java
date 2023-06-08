@@ -3,9 +3,9 @@ package nth.controllers;
 
 import lombok.RequiredArgsConstructor;
 import nth.books.Book;
-import nth.books.BookPrice;
-import nth.books.BookPriceService;
+import nth.books.BookService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -22,9 +22,10 @@ import java.util.List;
 public class AdminController {
 
 
-    private final BookPriceService bookService;
+    private final BookService bookService;
 
     @GetMapping  ("/admin")
+    @PreAuthorize("isAuthenticated()")
     public String bookConfigCreate(Model model){
 
         List<Book> book = bookService.findAll();
@@ -42,11 +43,13 @@ public class AdminController {
     }
 
     @PostMapping ("/admin")
+    @PreAuthorize("isAuthenticated()")
     public String bookConfigCreate(@RequestParam("bookPrice") String bookPrice,
                                    @RequestParam("bookName") String bookName ){
         if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated() &&
                 SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains
                         (new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+
             bookService.create(bookName, bookPrice);
             System.out.println("어드민 권한이 발생함");
             return "redirect:/admin";

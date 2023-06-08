@@ -40,10 +40,10 @@ public class QuestionController {
     private final UserInfoService userInfoService;
 
     @GetMapping("/list")
-    public String list(HttpServletRequest request,Principal principal,Model model, @RequestParam(value = "page",defaultValue = "0")
-            int page,@RequestParam(value = "kw",defaultValue = "") String kw)
+    public String list(HttpServletRequest request,Principal principal,Model model,
+                       @RequestParam(value = "page",defaultValue = "0") int page,
+                       @RequestParam(value = "kw",defaultValue = "") String kw)
     {
-
         /*
         String userId;
         if (principal != null) {

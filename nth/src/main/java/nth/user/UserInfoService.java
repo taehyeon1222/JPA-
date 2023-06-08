@@ -3,11 +3,8 @@ package nth.user;
 
 import lombok.RequiredArgsConstructor;
 import nth.DataNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -30,7 +27,6 @@ public class UserInfoService {
         return user;
 
     }
-
     public UserInfo getUser(String username){
         Optional<UserInfo> userInfo = userInfoRepository.findByUsername(username);
         if(userInfo.isPresent()){
@@ -38,4 +34,5 @@ public class UserInfoService {
         }
         else throw new DataNotFoundException("유저가 없습니다.");
     }
+
 }

@@ -14,7 +14,7 @@
     <tr th:each="book : ${book}">
         <td th:text="${book.id}"></td>
         <td th:text="${book.bookName}"></td>
-        <td th:text="${book.bookPrice != null ? book.bookPrice.Price : ''}"></td>
+        <td th:text="${book.price}"></td>
     </tr>
     </tbody>
 </table>
