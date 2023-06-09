@@ -26,7 +26,7 @@ public class UserSecurityService implements UserDetailsService {
          Optional<UserInfo> siteUser = this.userRepository.findByUsername(
                 username);
          if (siteUser.isEmpty()) {
-             throw new UsernameNotFoundException("사 용 자 를 찾 을 수 없 습 니 다.");
+             throw new UsernameNotFoundException("사용자를 찾을 수 없습니다.");
              }
          UserInfo User = siteUser.get();
          List<GrantedAuthority> authorities = new ArrayList<>();

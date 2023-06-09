@@ -1,9 +1,6 @@
 package nth.books;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,13 +12,13 @@ import java.util.List;
 public class CertificationInfo { // 자격증
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private  long id;
 
     private String CertificationName;
 
     @ManyToOne
-    private Book bookID;
-
+    private Book book;
 
 
 }

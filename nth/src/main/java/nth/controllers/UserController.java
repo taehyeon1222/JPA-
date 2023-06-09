@@ -32,7 +32,7 @@ public class UserController {
                     "2개의 패스워드가 일치하지 않습니다.");
             return "signup_form";
         }
-        /*
+
         try{
         userInfoService.create(userCreateForm.getUsername(),
                 userCreateForm.getPassword1(), userCreateForm.getEmail()
@@ -42,10 +42,9 @@ public class UserController {
             bindingResult.reject("signupFailed","이미 등록된 사용자 입니다.");
             return "signup_form";
         }
-        */
-        userInfoService.create(userCreateForm.getUsername(),
-                userCreateForm.getPassword1(), userCreateForm.getEmail()
-                ,userCreateForm.getNickname());
+//        userInfoService.create(userCreateForm.getUsername(),
+//                userCreateForm.getPassword1(), userCreateForm.getEmail()
+//                ,userCreateForm.getNickname());
         return "redirect:/";
     }
 

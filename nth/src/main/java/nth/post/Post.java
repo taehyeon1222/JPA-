@@ -1,4 +1,4 @@
-package nth.question;
+package nth.post;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -16,8 +16,7 @@ import java.util.Set;
 @Setter
 @Entity
 //빌더로 바꾸기
-
-public class Question {
+public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -36,7 +35,7 @@ public class Question {
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime modifyDate;
 
-    @OneToMany(mappedBy = "question" , cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "post" , cascade = CascadeType.REMOVE)
     private List<Answer> answerList;
 
     @ManyToOne

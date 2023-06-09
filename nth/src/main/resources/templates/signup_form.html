@@ -9,12 +9,11 @@
     </div>
 </div>
 <form th:action="@{/user/signup}" th:object="${userInfoCreteForm}" method="post">
-    <div th:fragment="formErrorsFragment"
-         2 role="alert" th:if="${#fields.hasAnyErrors()}">
+    <div role="alert" th:if="${#fields.hasAnyErrors()}">
         <div th:each="err : ${#fields.allErrors()}" th:text="${err}" />
     </div>
 
-    <div th:replace="~{index :: formErrorsFragment}"></div>
+
     <div class="mb-3">
         <label for="username" class="form-label">사 용 자ID</label>
         <input type="text" th:field="*{username}" class="form-control">

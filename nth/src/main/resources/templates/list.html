@@ -8,17 +8,20 @@
 <div class="container my-3">
    <span sec:authorize="isAuthenticated()">
     <span th:text="${#authentication.principal.username}"></span>
+       <!-- 유저 권한 확인 코드 불필요
     <span th:each="authority : ${#authentication.principal.authorities}">
         <span th:text="${authority.authority}"></span>
+        -->
     </span>
-</span>
-    <span  sec:authorize="isAuthenticated()"
-            th:text="${UserInfo.nickname}">닉네임없음</span>
+
+
+    <span  sec:authorize="isAuthenticated()" th:text="${UserInfo.nickname}"></span>
+    <span sec:authorize="isAuthenticated()"  th:text="님반갑습니다."></span>
     <a sec:authorize="isAnonymous()" th:href="@{/user/login}">로그인</a>
     <a sec:authorize="isAnonymous()" th:href="@{user/signup}">회원가입</a>
     <a sec:authorize="isAuthenticated()" th:href="@{/user/logout}">로그아웃</a>
-</div>
 
+</div>
     <table class="table">
         <thead class="table-dark">
 
@@ -30,21 +33,21 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="question, loop : ${paging}">
+        <tr th:each="post, loop : ${paging}">
             <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index }"></td>
             <td>
-                <a th:href="@{|/question/detail/${question.id}|}" th:text="${question.subject}"> </a>
+                <a th:href="@{|/post/detail/${post.id}|}" th:text="${post.subject}"> </a>
                 <span class="text-danger" small ms-2
-                th:if="${#lists.size(question.answerList) >0}"
-                      th:text="${#lists.size(question.answerList)}">
+                th:if="${#lists.size(post.answerList) >0}"
+                      th:text="${#lists.size(post.answerList)}">
                 </span>
             </td>
             <td>
-                <span th:if="${question.author != null}"th:text="${question.author.username}"></span>
+                <span th:if="${post.author != null}"th:text="${post.author.username}"></span>
             </td>
-            <td th:text="${#temporals.format(question.createDate,'yy년M월dd일 HH시mm분')}"></td>
+            <td th:text="${#temporals.format(post.createDate,'yy년M월dd일 HH시mm분')}"></td>
         </tr>
-        <a th:href="@{question_form}" class="btn btn-primary">작성하기</a>
+        <a th:href="@{post_form}" class="btn btn-primary">작성하기</a>
         </tbody>
     </table>
     <!-- 페이징 처리-->
@@ -62,7 +65,7 @@
                 th:if="${page >= paging.number-5 and page <= paging.number+5}"
                 th:classappend="${page == paging.number} ? 'active'"
                 class="page-item">
-                <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
+               <!-- <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a> -->
                 <a th:text="${page}" class="page-link" th:href="@{|?page=${page}&kw=${kw}|}"></a>
             </li>
             <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">

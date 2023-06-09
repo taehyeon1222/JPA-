@@ -19,12 +19,12 @@ public class Book {
     @Column(unique = true)
     private String bookName;
 
-    private String publisher; //출판사
+ //   private String publisher; //출판사
 
-    private String link; // 구매연결링크
+   // private String link; // 구매연결링크
 
     private String Price;
 
-    @OneToMany(mappedBy = "bookID", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE)
     private List<CertificationInfo> certificationInfoList;
 }

@@ -1,4 +1,4 @@
-package nth.question;
+package nth.post;
 
 import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
@@ -17,16 +17,15 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.zip.DataFormatException;
 
 @Service
 @RequiredArgsConstructor
-public class QuestionService {
+public class PostService {
 
-    private final QuestionRepository questionRepository;
+    private final PostRepository postRepository;
 
-    public List<Question> getList() {
-        return this.questionRepository.findAll();
+    public List<Post> getList() {
+        return this.postRepository.findAll();
     }
 
     /**
@@ -35,9 +34,9 @@ public class QuestionService {
      * @param page
      * @return
      */
-    public Page<Question> getList1(int page) {
+    public Page<Post> getList1(int page) {
         Pageable pageable = PageRequest.of(page, 10);
-        return this.questionRepository.findAll(pageable);
+        return this.postRepository.findAll(pageable);
     }
 
     /**
@@ -48,26 +47,26 @@ public class QuestionService {
      *             <p>
      *             page : 페이징 @RequestParam(value = "page",defaultValue = "0")
      *             int page
-     * @return this.questionRepository.findAll(pageable);
+     * @return this.postRepository.findAll(pageable);
      */
-    public Page<Question> getList(int page, String kw) {
+    public Page<Post> getList(int page, String kw) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate")); //작성시간순
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
-        Specification<Question> specification = search(kw);
-        return this.questionRepository.findAll(specification, pageable);
+        Specification<Post> specification = search(kw);
+        return this.postRepository.findAll(specification, pageable);
 
     }
 
     /**
      * @parm id 값을 받아와서 화면에 상세보기
      */
-    public Question getQuestion(Long id) {
-        Optional<Question> question = this.questionRepository.findById(id);
-        if (question.isPresent()) {
-            return question.get();
+    public Post getPost(Long id) {
+        Optional<Post> post = this.postRepository.findById(id);
+        if (post.isPresent()) {
+            return post.get();
         } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "question not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "post not found");
         }
     }
 
@@ -78,33 +77,33 @@ public class QuestionService {
      * @param 내용
      */
     public void create(String s, String c, UserInfo userInfo) {
-        Question question = new Question();
-        question.setSubject(s);
-        question.setContent(c);
-        question.setAuthor(userInfo);
-        question.setCreateDate(LocalDateTime.now());
-        this.questionRepository.save(question);
+        Post post = new Post();
+        post.setSubject(s);
+        post.setContent(c);
+        post.setAuthor(userInfo);
+        post.setCreateDate(LocalDateTime.now());
+        this.postRepository.save(post);
     }
     //수정
-    public void modify(Question question, String subject, String content) {
-        question.setSubject(subject);
-        question.setContent(content);
-        question.setModifyDate(LocalDateTime.now());
-        this.questionRepository.save(question);
+    public void modify(Post post, String subject, String content) {
+        post.setSubject(subject);
+        post.setContent(content);
+        post.setModifyDate(LocalDateTime.now());
+        this.postRepository.save(post);
     }
 
-    public void delete(Question question) {
-        this.questionRepository.delete(question);
+    public void delete(Post post) {
+        this.postRepository.delete(post);
     }
 
     /**
-     * @param question : 질문내역
+     * @param post : 질문내역
      * @param userInfo : 유저정보
      *                 유저정보로 추천값 상승
      */
-    public void vote(Question question, UserInfo userInfo) {
-        question.getVoter().add(userInfo);
-        this.questionRepository.save(question);
+    public void vote(Post post, UserInfo userInfo) {
+        post.getVoter().add(userInfo);
+        this.postRepository.save(post);
 
     }
 
@@ -113,15 +112,15 @@ public class QuestionService {
     /**
      * @Parm kw: 키워드
      */
-    private Specification<Question> search(String kw) {
+    private Specification<Post> search(String kw) {
         return new Specification<>() {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public Predicate toPredicate(Root<Question> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+            public Predicate toPredicate(Root<Post> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
                 query.distinct(false); // 중복을 제거
-                Join<Question, UserInfo> u1 = root.join("author", JoinType.LEFT); //
-                Join<Question, Answer> a = root.join("answerList", JoinType.LEFT);
+                Join<Post, UserInfo> u1 = root.join("author", JoinType.LEFT); //
+                Join<Post, Answer> a = root.join("answerList", JoinType.LEFT);
                 Join<Answer, UserInfo> u2 = a.join("author", JoinType.LEFT);
                 return criteriaBuilder.or(
                         criteriaBuilder.isNull(u1.get("username")),

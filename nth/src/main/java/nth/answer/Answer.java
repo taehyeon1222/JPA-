@@ -3,7 +3,7 @@ package nth.answer;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import nth.question.Question;
+import nth.post.Post;
 import nth.user.UserInfo;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -26,7 +26,7 @@ public class Answer {
     private LocalDateTime createDate;
 
     @ManyToOne
-    private Question question;
+    private Post post;
 
     @ManyToOne
     private UserInfo author;

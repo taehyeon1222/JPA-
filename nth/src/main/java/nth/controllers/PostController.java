@@ -1,21 +1,18 @@
 package nth.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
-import nth.question.Question;
-import nth.question.QuestionForm;
-import nth.question.QuestionRepository;
-import nth.question.QuestionService;
+import nth.DataNotFoundException;
+import nth.post.Post;
+import nth.post.PostForm;
+import nth.post.PostService;
 import nth.user.UserInfo;
 import nth.user.UserInfoService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -25,18 +22,16 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
-import java.util.List;
 import java.util.Random;
-import java.util.zip.DataFormatException;
 
 @Controller
 @RequiredArgsConstructor
-//@RequestMapping("view/question")
+//@RequestMapping("view/post")
 @EnableMethodSecurity(prePostEnabled = true)
-public class QuestionController {
+public class PostController {
 
 
-    private final QuestionService questionService;
+    private final PostService postService;
     private final UserInfoService userInfoService;
 
     @GetMapping("/list")
@@ -61,146 +56,152 @@ public class QuestionController {
         model.addAttribute("userId", userId); // userId를 먼저 추가
         익명아이디 아직 미구현
         */
-        Page<Question> paging = this.questionService.getList(page,kw);//키워드 추가
+        Page<Post> paging = this.postService.getList(page,kw);//키워드 추가
         model.addAttribute("paging", paging); // paging 추가
         model.addAttribute("kw", kw); // 검색기능 추가
 
         // 유저 정보를 가져와서 닉네임 추가를 해주기 위함
         if(principal != null) {
-            UserInfo userInfo = this.userInfoService.getUser(principal.getName());
-            model.addAttribute("UserInfo", userInfo);
+            try {
+                UserInfo userInfo = this.userInfoService.getUser(principal.getName());
+                // 처음실행시 유저 가 없어서 오류 발생시킴
+                model.addAttribute("UserInfo", userInfo);
+            }catch (DataNotFoundException e){
+                return "redirect:/user/signup";
+            }
         }
         return "list";
     }
 
-    @GetMapping("/question/detail/{id}")
+    @GetMapping("/post/detail/{id}")
     public String listjoin(Model model, @PathVariable("id") Long id) {
-        Question question = this.questionService.getQuestion(id);
-        model.addAttribute("question",question);
+        Post post = this.postService.getPost(id);
+        model.addAttribute("post", post);
         return "list_d";
     }
 
     @PreAuthorize("isAuthenticated()") // 로그인이 아닐경우 로그인으로 리다이렉션
-    @GetMapping ("/question_form")
-    public String questionCreate(QuestionForm questionForm){
-        // this.questionService.create(subject,content);
-        return "question_form";
+    @GetMapping ("/post_form")
+    public String postCreate(PostForm postForm){
+        // this.postService.create(subject,content);
+        return "post_form";
     }
 
     @PreAuthorize("isAuthenticated()")
-    @PostMapping ("/question_form")
-    public String questionCreate(@Valid QuestionForm questionForm, BindingResult bindingResult,Principal principal){
+    @PostMapping ("/post_form")
+    public String postCreate(@Valid PostForm postForm,
+                                 BindingResult bindingResult,Principal principal){
+
         if(bindingResult.hasErrors()){
-            return "question_form";
+            return "post_form";
         }
         UserInfo userInfo = this.userInfoService.getUser(principal.getName());
-        this.questionService.create(questionForm.getSubject(),questionForm.getContent(),userInfo);
+        this.postService.create(postForm.getSubject(), postForm.getContent(),userInfo);
         return "redirect:/list";
     }
 
     //질문저장
     /*
-    @PostMapping ("/question/create")
-    public String questionCreate(@RequestParam String subject, @RequestParam String content){
-        this.questionService.create(subject,content);
+    @PostMapping ("/post/create")
+    public String postCreate(@RequestParam String subject, @RequestParam String content){
+        this.postService.create(subject,content);
         return "redirect:/list";
     }
     */
 
     /*
-    @PostMapping ("/question/create")
-    public String questionCreate1(@Valid QuestionForm questionForm, BindingResult bindingResult){
+    @PostMapping ("/post/create")
+    public String postCreate1(@Valid PostForm postForm, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
-            return "question_form";
+            return "post_form";
         }
-        this.questionService.create(questionForm.getContent(),questionForm.getSubject());
+        this.postService.create(postForm.getContent(),postForm.getSubject());
         return "redirect:/list";
     }
 */
 
 
 
-    //수정버튼 question/modify/${question.id
+    //수정버튼 post/modify/${post.id
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/question/modify/{id}")
-    public String questionModify(QuestionForm questionForm,@PathVariable("id") long id
-            ,Principal principal){
-        Question question = this.questionService.getQuestion(id);
+    @GetMapping("/post/modify/{id}")
+    public String postModify(PostForm postForm, @PathVariable("id") long id
+            , Principal principal){
+        Post post = this.postService.getPost(id);
 
         if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated() &&
                 SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains
                         (new SimpleGrantedAuthority("ROLE_ADMIN"))) {
             System.out.println("어드민 권한이 발생함");
-            questionForm.setSubject(question.getSubject());
-            questionForm.setContent(question.getContent());
-            return "question_form";
+            postForm.setSubject(post.getSubject());
+            postForm.setContent(post.getContent());
+            return "post_form";
            // throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"관리자권한입니다.");
         }
-        if(!question.getAuthor().getUsername().equals(principal.getName())){
+        if(!post.getAuthor().getUsername().equals(principal.getName())){
             //비정상적인 경로로 들어올 경우 유저 이름검사
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"수정권한 이없습니다.");
         }
-        questionForm.setSubject(question.getSubject());
-        questionForm.setContent(question.getContent());
-        return "question_form";
+        postForm.setSubject(post.getSubject());
+        postForm.setContent(post.getContent());
+        return "post_form";
     }
 
-    @PreAuthorize("isAuthenticated()")  // /question/modify
-    @PostMapping("/question/modify/{id}")
-    public String questionModify(@Valid QuestionForm questionForm,
-                               BindingResult bindingResult,
-    Principal principal, @PathVariable("id") long id) {
+    @PreAuthorize("isAuthenticated()")  // /post/modify
+    @PostMapping("/post/modify/{id}")
+    public String postModify(@Valid PostForm postForm,
+                               BindingResult bindingResult, Principal principal,
+                                 @PathVariable("id") long id) {
          if (bindingResult.hasErrors()) {
-             return "question_form";
+             return "post_form";
              }
-        Question question = this.questionService.getQuestion(id);
+        Post post = this.postService.getPost(id);
         if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated() &&
                 SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains
                         (new SimpleGrantedAuthority("ROLE_ADMIN"))) {
             System.out.println("어드민 권한이 발생함");
-            this.questionService.modify(question, questionForm.getSubject(),
-                    questionForm.getContent());
-            return String.format("redirect:/question/detail/%s",id);
+            this.postService.modify(post, postForm.getSubject(),
+                    postForm.getContent());
+            return String.format("redirect:/post/detail/%s",id);
 
         }
 
-         if (!question.getAuthor().getUsername().equals(principal.getName())) {
+         if (!post.getAuthor().getUsername().equals(principal.getName())) {
              System.out.println("수정 권한이 발생함");
              throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
                      }
 
-         this.questionService.modify(question, questionForm.getSubject(),
-                questionForm.getContent());
-        return String.format("redirect:/question/detail/%s",id);
+         this.postService.modify(post, postForm.getSubject(),
+                postForm.getContent());
+        return String.format("redirect:/post/detail/%s",id);
          }
 
-
-         //삭제버튼작동 /|question/delete/{id}   /question/delete/${question.id}|}"
+         //삭제버튼작동
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/question/delete/{id}")
-    public String questionDelete(Principal principal,@PathVariable("id") long id){
-            Question question = this.questionService.getQuestion(id);
+    @GetMapping("/post/delete/{id}")
+    public String postDelete(Principal principal,@PathVariable("id") long id){
+            Post post = this.postService.getPost(id);
         if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated() &&
                 SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains
                         (new SimpleGrantedAuthority("ROLE_ADMIN"))) {
             System.out.println("어드민 권한이 발생함");
-            this.questionService.delete(question);
+            this.postService.delete(post);
             return "redirect:/";
         }
-            if(!question.getAuthor().getUsername().equals(principal.getName())){
+            if(!post.getAuthor().getUsername().equals(principal.getName())){
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"삭제권한이 없습니다.");
             }
-            this.questionService.delete(question);
+            this.postService.delete(post);
         return "redirect:/";
          }
 
          //추천버튼
-         @GetMapping("question/detail/question/vote/{id}")
+         @GetMapping("post/detail/post/vote/{id}")
          public String qestionVote(Principal principal, @PathVariable("id") long id){
-        Question question = this.questionService.getQuestion(id);
+        Post post = this.postService.getPost(id);
         UserInfo userInfo = this.userInfoService.getUser(principal.getName());
-        this.questionService.vote(question,userInfo);
-        return  String.format("redirect:/question/detail/%s",id);
+        this.postService.vote(post,userInfo);
+        return  String.format("redirect:/post/detail/%s",id);
          }
 
 

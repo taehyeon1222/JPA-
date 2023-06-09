@@ -1,4 +1,4 @@
-package nth.question;
+package nth.post;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class QuestionForm {
+public class PostForm {
 
     @Size
     @NotBlank(message = "제목은필수")

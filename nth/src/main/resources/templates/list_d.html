@@ -10,13 +10,13 @@
     <title>Title</title>
 </head>
 <body>
-<span th:if="${question.author != null}" th:text="${question.author.username + ' ' + question.author.nickname}">닉네임 없음</span>
-<h1 th:text="${question.subject}"></h1>
-<div th:text="${question.content}"> </div>
-<h5 th:text="|${#lists.size(question.answerList)}개의 답변이 있습니다.|"></h5>
+<span th:if="${post.author != null}" th:text="${post.author.username + ' ' + post.author.nickname}">닉네임 없음</span>
+<h1 th:text="${post.subject}"></h1>
+<div th:text="${post.content}"> </div>
+<h5 th:text="|${#lists.size(post.answerList)}개의 답변이 있습니다.|"></h5>
 <div>
     <ul>
-        <li th:each="answer : ${question.answerList}">
+        <li th:each="answer : ${post.answerList}">
             <span>글쓴이: </span>
             <span th:if="${answer.author != null}" th:text="${answer.author.username}"></span>
             <span th:unless="${answer.author != null}">작성자 없음</span>
@@ -26,42 +26,42 @@
 </div>
 <div>
 <!--추천버튼-->
-    <a th:href="@{|question/vote/${question.id}|}"
-       th:text="${#lists.size(question.voter)}">
+    <a th:href="@{|post/vote/${post.id}|}"
+       th:text="${#lists.size(post.voter)}">
     </a>
 </div>
 <div>
 
 
     <!--본인에게만 접근이 가능함 -->
-    <a th:href="@{|/question/modify/${question.id}|}" th:text="수정"
+    <a th:href="@{|/post/modify/${post.id}|}" th:text="수정"
        sec:authorize="isAuthenticated() and hasAuthority('ROLE_USER')"
-       th:if="${question.author != null and #authentication.getPrincipal().getUsername() == question.author
+       th:if="${post.author != null and #authentication.getPrincipal().getUsername() == post.author
            .username}">
     </a>
 
     <!-- 어드민만 접근가능 -->
-    <a th:href="@{|/question/modify/${question.id}|}" th:text="수정"
+    <a th:href="@{|/post/modify/${post.id}|}" th:text="수정"
        sec:authorize="isAuthenticated() and hasAuthority('ROLE_ADMIN')">
     </a>
 
 
     <!--본인에게만 접근이 가능함 -->
-    <a th:href="@{|/question/delete/${question.id}|}" th:text="삭제"
+    <a th:href="@{|/post/delete/${post.id}|}" th:text="삭제"
        sec:authorize="isAuthenticated() and hasAuthority('ROLE_USER')"
-       th:if="${question.author != null and #authentication.getPrincipal().getUsername() == question.author
+       th:if="${post.author != null and #authentication.getPrincipal().getUsername() == post.author
        .username}" >
     </a>
 
-    <!-- 어드민만 접근가능 /|question/delete/{id}"-->
-    <a th:href="@{|/question/delete/${question.id}|}" th:text="삭제"
+    <!-- 어드민만 접근가능 /|post/delete/{id}"-->
+    <a th:href="@{|/post/delete/${post.id}|}" th:text="삭제"
        sec:authorize="isAuthenticated() and hasAnyAuthority('ROLE_ADMIN')">
     </a>
 
 </div>
 
 
-<form th:action="@{|/question/create/${question.id}|}" th:object="${answerForm}" method="post" class="my-3">
+<form th:action="@{|/post/create/${post.id}|}" th:object="${answerForm}" method="post" class="my-3">
     <textarea name="content" id="content" rows="15"></textarea>
     <input type="submit" value="답변등록">
 </form>
