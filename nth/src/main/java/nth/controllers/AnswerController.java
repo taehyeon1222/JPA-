@@ -38,11 +38,11 @@ public class AnswerController {
         String userId = (String) session.getAttribute("userId");
         if(bindingResult.hasErrors()){
             model.addAttribute("post", post);
-            return "list_d";
+            return "post/list_d";
         }
         if(principal == null){
             System.out.println("널");
-            return "list";
+            return "post/list";
 
         }
 

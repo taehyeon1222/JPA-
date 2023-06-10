@@ -70,21 +70,21 @@ public class PostController {
                 return "redirect:/user/signup";
             }
         }
-        return "list";
+        return "post/list";
     }
 
     @GetMapping("/post/detail/{id}")
     public String listjoin(Model model, @PathVariable("id") Long id) {
         Post post = this.postService.getPost(id);
         model.addAttribute("post", post);
-        return "list_d";
+        return "post/list_d";
     }
 
     @PreAuthorize("isAuthenticated()") // 로그인이 아닐경우 로그인으로 리다이렉션
     @GetMapping ("/post_form")
     public String postCreate(PostForm postForm){
         // this.postService.create(subject,content);
-        return "post_form";
+        return "post/post_form";
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -93,7 +93,7 @@ public class PostController {
                                  BindingResult bindingResult,Principal principal){
 
         if(bindingResult.hasErrors()){
-            return "post_form";
+            return "post/post_form";
         }
         UserInfo userInfo = this.userInfoService.getUser(principal.getName());
         this.postService.create(postForm.getSubject(), postForm.getContent(),userInfo);
@@ -135,7 +135,7 @@ public class PostController {
             System.out.println("어드민 권한이 발생함");
             postForm.setSubject(post.getSubject());
             postForm.setContent(post.getContent());
-            return "post_form";
+            return "post/post_form";
            // throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"관리자권한입니다.");
         }
         if(!post.getAuthor().getUsername().equals(principal.getName())){
@@ -144,7 +144,7 @@ public class PostController {
         }
         postForm.setSubject(post.getSubject());
         postForm.setContent(post.getContent());
-        return "post_form";
+        return "post/post_form";
     }
 
     @PreAuthorize("isAuthenticated()")  // /post/modify
@@ -153,7 +153,7 @@ public class PostController {
                                BindingResult bindingResult, Principal principal,
                                  @PathVariable("id") long id) {
          if (bindingResult.hasErrors()) {
-             return "post_form";
+             return "post/post_form";
              }
         Post post = this.postService.getPost(id);
         if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated() &&

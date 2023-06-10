@@ -11,5 +11,15 @@ public class mainController {
         return "redirect:/list";
     }
 
+    @GetMapping("/layout")
+    public String root1(){
+        return "/layout/layout";
+    }
+
+    @GetMapping("/layout2")
+    public String root2(){
+        return "/layout/layout2";
+    }
+
 
 }

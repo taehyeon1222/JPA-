@@ -18,20 +18,21 @@ public class UserController {
 
     @GetMapping("/user/signup")
     public String signup(UserInfoCreteForm userInfoCreteForm){
-        return "signup_form";
+        return "user/signup_form";
     }
 
 
     @PostMapping("/user/signup")
     public String signup(@Valid UserInfoCreteForm userCreateForm, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
-            return "signup_form";
+            return "user/signup_form";
         }
         if(!userCreateForm.getPassword1().equals(userCreateForm.getPassword2())){
-            bindingResult.rejectValue("password2","passwordInCorrect",
+            bindingResult.rejectValue("password1","passwordInCorrect",
                     "2개의 패스워드가 일치하지 않습니다.");
-            return "signup_form";
+            return "user/signup_form";
         }
+
 
         try{
         userInfoService.create(userCreateForm.getUsername(),
@@ -39,9 +40,11 @@ public class UserController {
         ,userCreateForm.getNickname());
         }catch (DataIntegrityViolationException e){
             e.printStackTrace();
-            bindingResult.reject("signupFailed","이미 등록된 사용자 입니다.");
-            return "signup_form";
+            bindingResult.rejectValue("username",
+                    "signupFailed","이미 등록된 사용자 입니다.");
+            return "user/signup_form";
         }
+
 //        userInfoService.create(userCreateForm.getUsername(),
 //                userCreateForm.getPassword1(), userCreateForm.getEmail()
 //                ,userCreateForm.getNickname());
@@ -50,6 +53,6 @@ public class UserController {
 
     @GetMapping("/user/login")
     public String login(){
-        return "login_form";
+        return "user/login_form";
     }
 }
