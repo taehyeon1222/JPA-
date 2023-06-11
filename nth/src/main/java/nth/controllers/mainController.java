@@ -13,12 +13,12 @@ public class mainController {
 
     @GetMapping("/layout")
     public String root1(){
-        return "/layout/layout";
+        return "layout/navbar";
     }
 
-    @GetMapping("/layout2")
+    @GetMapping("/hi2")
     public String root2(){
-        return "/layout/layout2";
+        return "elements";
     }
 
 

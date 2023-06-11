@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html th:fragment="content"
+        xmlns:th="http://www.thymeleaf.org" lang="ko"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+  <meta charset="UTF-8">
+  <!-- CSS here -->
+  <th:block th:fragment="css">
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+  <link rel="stylesheet" th:href="@{/css/owl.carousel.min.css}">
+  <link rel="stylesheet" th:href="@{/css/magnific-popup.css}">
+  <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
+  <link rel="stylesheet" th:href="@{/css/themify-icons.css}">
+  <link rel="stylesheet" th:href="@{/css/nice-select.css}">
+  <link rel="stylesheet" th:href="@{/css/flaticon.css}">
+  <link rel="stylesheet" th:href="@{/css/gijgo.css}">
+  <link rel="stylesheet" th:href="@{/css/animate.css}">
+  <link rel="stylesheet" th:href="@{/css/slicknav.css}">
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  </th:block>
+  <style>
+    h6 {
+      margin-bottom: .5rem;
+      font-family: inherit;
+      font-weight: 500;
+      line-height: 1.2;
+      color: inherit
+    }
+  </style>
+</head>
+
+
+
+
+  <header >
+    <div>
+
+    <div class="header-area">
+      <div id="sticky-header" class="main-header-area">
+        <div class="container-fluid ">
+          <div class="header_bottom_border">
+            <div class="row align-items-center">
+              <div class="col-xl-3 col-lg-2">
+                <div class="logo">
+                  <a href="/"></a>
+                </div>
+              </div>
+              <div class="col-xl-6 col-lg-7">
+                <div class="main-menu  d-none d-lg-block">
+                  <nav>
+                    <ul id="navigation">
+                      <li><a href="/">home</a></li>
+                      <li><a href="">공지사항</a></li>
+                      <li><a href="/list">자유게시판</a></li>
+                    </ul>
+                  </nav>
+                </div>
+              </div>
+              <div class="col-xl-3 col-lg-3 d-none d-lg-block">
+                <div class="Appointment">
+                  <div class="phone_num d-none d-xl-block">
+                    <a sec:authorize="isAnonymous()" th:href="@{/user/signup}">회원가입</a>
+                    <a  lass="boxed-btn3" sec:authorize="isAuthenticated()" th:href="@{/user/logout}">회원정보</a>
+                  </div>
+                  <div class="d-none d-lg-block">
+                    <a  class="boxed-btn2" sec:authorize="isAuthenticated()" th:href="@{/user/logout}">로그아웃</a>
+                    <a class="boxed-btn3" sec:authorize="isAnonymous()" th:href="@{/user/login}">로그인</a>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="mobile_menu d-block d-lg-none"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </header>
+<div class="bradcam_area bradcam_bg_1">
+  <div class="container">
+    <div class="row">
+      <div class="col-xl-12">
+        <div class="bradcam_text">
+          <h3 style="color: #FFFFFF">
+            <span  sec:authorize="isAuthenticated()" th:text="${UserInfo.nickname}"></span>
+            <br>
+          </h3>
+          <h3>
+            <span sec:authorize="isAuthenticated()" th:text="'님 반갑습니다. : - )'"></span>
+               <!-- 유저 권한 확인 코드 불필요
+            <span th:each="authority : ${#authentication.principal.authorities}">
+                <span th:text="${authority.authority}"></span>
+                -->
+          </h3>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+</html>
