@@ -9,6 +9,9 @@
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
+<header>
+    <div th:replace="layout/navbar :: content"></div>
+</header>
 <body>
 <span th:if="${post.author != null}" th:text="${post.author.username + ' ' + post.author.nickname}">닉네임 없음</span>
 <h1 th:text="${post.subject}"></h1>

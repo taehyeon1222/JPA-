@@ -32,7 +32,10 @@ public class UserInfoService {
         if(userInfo.isPresent()){
             return userInfo.get();
         }
-        else throw new DataNotFoundException("유저가 없습니다.");
+
+        else
+            System.out.println("getUser실행됨");
+        throw new DataNotFoundException("유저가 없습니다.");
     }
 
 }

@@ -2,6 +2,7 @@ package nth.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import nth.user.UserInfo;
 import nth.user.UserInfoCreteForm;
 import nth.user.UserInfoService;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -10,6 +11,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.security.Principal;
+
 @Controller
 @RequiredArgsConstructor
 public class UserController {
@@ -17,7 +20,8 @@ public class UserController {
     private final UserInfoService userInfoService;
 
     @GetMapping("/user/signup")
-    public String signup(UserInfoCreteForm userInfoCreteForm){
+    public String signup(UserInfoCreteForm userInfoCreteForm, Principal principal){
+        //UserInfo userInfo = this.userInfoService.(principal.getName());
         return "user/signup_form";
     }
 
@@ -55,4 +59,5 @@ public class UserController {
     public String login(){
         return "user/login_form";
     }
+
 }

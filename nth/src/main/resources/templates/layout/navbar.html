@@ -85,17 +85,17 @@
     <div class="row">
       <div class="col-xl-12">
         <div class="bradcam_text">
+
           <h3 style="color: #FFFFFF">
-            <span  sec:authorize="isAuthenticated()" th:text="${UserInfo.nickname}"></span>
+            <span sec:authorize="isAuthenticated()">
+              <span th:if="${userInfo != null}" th:text="${userInfo.nickname}"></span>
+            </span>
             <br>
           </h3>
           <h3>
             <span sec:authorize="isAuthenticated()" th:text="'님 반갑습니다. : - )'"></span>
-               <!-- 유저 권한 확인 코드 불필요
-            <span th:each="authority : ${#authentication.principal.authorities}">
-                <span th:text="${authority.authority}"></span>
-                -->
           </h3>
+
 
 
         </div>

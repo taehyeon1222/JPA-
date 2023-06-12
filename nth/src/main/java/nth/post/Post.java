@@ -41,6 +41,9 @@ public class Post {
     @ManyToOne
     private UserInfo author;
 
+    @ManyToOne
+    private Category category; //카테고리 지정
+
     @ManyToMany
     Set<UserInfo> voter;
 }

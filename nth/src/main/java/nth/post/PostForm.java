@@ -10,9 +10,9 @@ import lombok.Setter;
 public class PostForm {
 
     @Size
-    @NotBlank(message = "제목은필수")
+    @NotBlank(message = "제목은 필수")
     private String subject;
 
-    @NotBlank(message = "내용은필수")
+    @NotBlank(message = "내용은 필수")
     private String content;
 }

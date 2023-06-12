@@ -37,44 +37,20 @@ public class PostController {
     @GetMapping("/list")
     public String list(HttpServletRequest request,Principal principal,Model model,
                        @RequestParam(value = "page",defaultValue = "0") int page,
-                       @RequestParam(value = "kw",defaultValue = "") String kw)
-    {
-        /*
-        String userId;
-        if (principal != null) {
-            userId = principal.getName();
-        } else {
-            HttpSession session = request.getSession();
-            userId = (String) session.getAttribute("userId");
-            if (userId == null) {
-                // 세션에 익명 사용자 아이디 생성 및 저장
-                userId = randomUserIdCreate();
-                session.setAttribute("userId", userId);
-            }
-        }
-          model.addAttribute("UserInfo", userId);
-        model.addAttribute("userId", userId); // userId를 먼저 추가
-        익명아이디 아직 미구현
-        */
+                       @RequestParam(value = "kw",defaultValue = "") String kw) {
+
         Page<Post> paging = this.postService.getList(page,kw);//키워드 추가
         model.addAttribute("paging", paging); // paging 추가
         model.addAttribute("kw", kw); // 검색기능 추가
 
         // 유저 정보를 가져와서 닉네임 추가를 해주기 위함
-        if(principal != null) {
-            try {
-                UserInfo userInfo = this.userInfoService.getUser(principal.getName());
-                // 처음실행시 유저 가 없어서 오류 발생시킴
-                model.addAttribute("UserInfo", userInfo);
-            }catch (DataNotFoundException e){
-                return "redirect:/user/signup";
-            }
-        }
+        addUserInfoNiname(model,principal); //닉네임 추가
         return "post/list";
     }
 
     @GetMapping("/post/detail/{id}")
-    public String listjoin(Model model, @PathVariable("id") Long id) {
+    public String listjoin(Model model,Principal principal, @PathVariable("id") Long id) {
+        addUserInfoNiname(model,principal);
         Post post = this.postService.getPost(id);
         model.addAttribute("post", post);
         return "post/list_d";
@@ -82,8 +58,9 @@ public class PostController {
 
     @PreAuthorize("isAuthenticated()") // 로그인이 아닐경우 로그인으로 리다이렉션
     @GetMapping ("/post_form")
-    public String postCreate(PostForm postForm){
-        // this.postService.create(subject,content);
+    public String postCreate(PostForm postForm,Model model,Principal principal){
+        model.addAttribute("postForm",postForm);;
+        addUserInfoNiname(model,principal);
         return "post/post_form";
     }
 
@@ -100,27 +77,6 @@ public class PostController {
         return "redirect:/list";
     }
 
-    //질문저장
-    /*
-    @PostMapping ("/post/create")
-    public String postCreate(@RequestParam String subject, @RequestParam String content){
-        this.postService.create(subject,content);
-        return "redirect:/list";
-    }
-    */
-
-    /*
-    @PostMapping ("/post/create")
-    public String postCreate1(@Valid PostForm postForm, BindingResult bindingResult){
-        if(bindingResult.hasErrors()){
-            return "post_form";
-        }
-        this.postService.create(postForm.getContent(),postForm.getSubject());
-        return "redirect:/list";
-    }
-*/
-
-
 
     //수정버튼 post/modify/${post.id
     @PreAuthorize("isAuthenticated()")
@@ -129,21 +85,15 @@ public class PostController {
             , Principal principal){
         Post post = this.postService.getPost(id);
 
-        if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated() &&
-                SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains
-                        (new SimpleGrantedAuthority("ROLE_ADMIN"))) {
-            System.out.println("어드민 권한이 발생함");
+        if (checkAdmin(principal)) { //어드민 수정
             postForm.setSubject(post.getSubject());
             postForm.setContent(post.getContent());
-            return "post/post_form";
-           // throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"관리자권한입니다.");
+            //throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"관리자권한입니다.");
+        } else {// 유저닉네임 및 권한체크
+            checkPermission(post, principal.getName());
         }
-        if(!post.getAuthor().getUsername().equals(principal.getName())){
-            //비정상적인 경로로 들어올 경우 유저 이름검사
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"수정권한 이없습니다.");
-        }
-        postForm.setSubject(post.getSubject());
-        postForm.setContent(post.getContent());
+         postForm.setSubject(post.getSubject());
+         postForm.setContent(post.getContent());
         return "post/post_form";
     }
 
@@ -152,60 +102,118 @@ public class PostController {
     public String postModify(@Valid PostForm postForm,
                                BindingResult bindingResult, Principal principal,
                                  @PathVariable("id") long id) {
-         if (bindingResult.hasErrors()) {
-             return "post/post_form";
-             }
+        if (bindingResult.hasErrors()) {
+            return "post/post_form";
+        }
         Post post = this.postService.getPost(id);
-        if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated() &&
-                SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains
-                        (new SimpleGrantedAuthority("ROLE_ADMIN"))) {
-            System.out.println("어드민 권한이 발생함");
+
+        if (checkAdmin(principal)){
             this.postService.modify(post, postForm.getSubject(),
                     postForm.getContent());
-            return String.format("redirect:/post/detail/%s",id);
-
+            return String.format("redirect:/post/detail/%s", id);
         }
 
-         if (!post.getAuthor().getUsername().equals(principal.getName())) {
-             System.out.println("수정 권한이 발생함");
-             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
-                     }
-
-         this.postService.modify(post, postForm.getSubject(),
+        checkPermission(post, principal.getName()); // 유저 권한체크
+        this.postService.modify(post, postForm.getSubject(),
                 postForm.getContent());
-        return String.format("redirect:/post/detail/%s",id);
-         }
-
+        return String.format("redirect:/post/detail/%s", id);
+    }
          //삭제버튼작동
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/post/delete/{id}")
-    public String postDelete(Principal principal,@PathVariable("id") long id){
+        @PreAuthorize("isAuthenticated()")
+        @GetMapping("/post/delete/{id}")
+        public String postDelete(Principal principal,@PathVariable("id") long id){
             Post post = this.postService.getPost(id);
-        if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated() &&
-                SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains
-                        (new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+
+        if (checkAdmin(principal)) {
             System.out.println("어드민 권한이 발생함");
             this.postService.delete(post);
             return "redirect:/";
         }
-            if(!post.getAuthor().getUsername().equals(principal.getName())){
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"삭제권한이 없습니다.");
-            }
-            this.postService.delete(post);
+        checkPermission(post, principal.getName());
+        this.postService.delete(post);
         return "redirect:/";
          }
 
          //추천버튼
          @GetMapping("post/detail/post/vote/{id}")
          public String qestionVote(Principal principal, @PathVariable("id") long id){
-        Post post = this.postService.getPost(id);
-        UserInfo userInfo = this.userInfoService.getUser(principal.getName());
-        this.postService.vote(post,userInfo);
-        return  String.format("redirect:/post/detail/%s",id);
-         }
+             Post post = this.postService.getPost(id);
+             UserInfo userInfo = this.userInfoService.getUser(principal.getName());
+            this.postService.vote(post,userInfo);
+            return  String.format("redirect:/post/detail/%s",id);
+        }
+    /**
+     *
+     * @param model
+     * @param principal
+     * @return 회원가입창으로 리턴
+     * 모델과 유저정보를 받고 유저가 없을 경우 회원가입창으로 보냄
+     * 혹은 유저닉네임을 표시하기 위해 필요한 메서드
+     *
+     */
+    private String addUserInfoNiname(Model model, Principal principal) {
+        if (principal != null) {
+            try {
+                UserInfo userInfo = userInfoService.getUser(principal.getName());
+                model.addAttribute("userInfo", userInfo);
+            } catch (DataNotFoundException e) {
+                System.out.println("처음 실행 시 유저가 없어서 오류 발생");
+
+                return "redirect:/user/signup";
+            }
+        }
+        return "redirect:/user/signup";
+    }
+
+    /**
+     *
+     * @param post : Post post = this.postService.getPost(id) 를 담고 있어야함
+     * @param username  : principal.getName  를 담고 있어야함
+     *<br>
+     * 유저의 아이디와 작성 된 유저아이디를 체크
+     */
+    private void checkPermission(Post post, String username) {
+        if (!post.getAuthor().getUsername().equals(username)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "권한이 없습니다.");
+            //이후 에러메시지 말고 다른 방식으로 구현할것 생각하기.
+        }
+    }
+
+    /**
+     * 관리자 권한체크
+     * @return 반환값 어드민인경우 트루
+     */
+    private boolean checkAdmin(Principal principal){
+        return  SecurityContextHolder.getContext().getAuthentication().isAuthenticated() &&
+                SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains
+                        (new SimpleGrantedAuthority("ROLE_ADMIN"));
+    }
+
+}
 
 
-         //랜덤 userID 문자열 반환
+
+
+  /*
+         if (!post.getAuthor().getUsername().equals(principal.getName())) {
+             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
+                     }
+
+                     if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated() &&
+                SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains
+                        (new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            postForm.setSubject(post.getSubject());
+            postForm.setContent(post.getContent());
+            System.out.println("어드민 권한이 발생함");
+            //throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"관리자권한입니다.");
+        }
+
+
+
+        */
+
+//랜덤 userID 문자열 반환
+            /* 개발일시 중지
         public String randomUserIdCreate(){
         String randomId = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         String result = ""; //
@@ -219,8 +227,5 @@ public class PostController {
         System.out.println(result);
         return result;
     }
-
-
- }
-
+*/
 
