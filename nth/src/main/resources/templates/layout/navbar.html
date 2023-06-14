@@ -5,9 +5,12 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Black+Han+Sans:400&display=swap&subset=korean">
+
   <meta charset="UTF-8">
   <!-- CSS here -->
   <th:block th:fragment="css">
+    <link rel="stylesheet"th:href="@{mycss/font/font.css}">
   <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
   <link rel="stylesheet" th:href="@{/css/owl.carousel.min.css}">
   <link rel="stylesheet" th:href="@{/css/magnific-popup.css}">
@@ -62,7 +65,7 @@
                 <div class="Appointment">
                   <div class="phone_num d-none d-xl-block">
                     <a sec:authorize="isAnonymous()" th:href="@{/user/signup}">회원가입</a>
-                    <a  lass="boxed-btn3" sec:authorize="isAuthenticated()" th:href="@{/user/logout}">회원정보</a>
+                    <a  class="boxed-btn3" sec:authorize="isAuthenticated()" th:href="@{/user/logout}">회원정보</a>
                   </div>
                   <div class="d-none d-lg-block">
                     <a  class="boxed-btn2" sec:authorize="isAuthenticated()" th:href="@{/user/logout}">로그아웃</a>
@@ -86,14 +89,19 @@
       <div class="col-xl-12">
         <div class="bradcam_text">
 
-          <h3 style="color: #FFFFFF">
-            <span sec:authorize="isAuthenticated()">
-              <span th:if="${userInfo != null}" th:text="${userInfo.nickname}"></span>
+          <h3
+            style="color: #FFFFFF">
+            <span style="font-family: 'Black Han Sans', sans-serif"
+                    class="my-custom-font"
+                    sec:authorize="isAuthenticated()">
+              <span style="font-family: 'Black Han Sans', sans-serif"
+                      th:if="${userInfo != null}" th:text="${userInfo.nickname+' 님'}"></span>
             </span>
             <br>
           </h3>
           <h3>
-            <span sec:authorize="isAuthenticated()" th:text="'님 반갑습니다. : - )'"></span>
+            <span style="font-family: 'Black Han Sans', sans-serif"
+                    sec:authorize="isAuthenticated()" th:text="'  반갑습니다. : - )'"></span>
           </h3>
 
 
