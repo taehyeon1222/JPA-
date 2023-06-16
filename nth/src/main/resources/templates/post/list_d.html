@@ -67,67 +67,41 @@
         </div><!--왼쪽끝시작-->
 
 
+
+
         <!--수정/삭제버튼 오른쪽시작-->
         <div class="col text-right">
-
 
             <!-- 수정/ 추천버튼 기능-->
             <div class="d-flex flex-row-reverse">
 
-                <!--본인에게만 접근이 가능함  수정-->
-                <div sec:authorize="isAuthenticated() and hasAuthority('ROLE_USER')"
-                     th:if="${post.author != null and #authentication.getPrincipal().getUsername() == post.author.username}">
-                    <a class="btn btn-outline-secondary"
-                       th:href="@{|/post/modify/${post.id}|}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
-                        </svg>
-                        <span class="visually-hidden">수정</span>
-                    </a>
-                </div>  <!--본인에게만 접근이 가능함끝  수정 -->
-
-
-                <!--삭제시작-->
-                <div sec:authorize="isAuthenticated() and hasAuthority('ROLE_USER')"
-                     th:if="${post.author != null and #authentication.getPrincipal().getUsername() == post.author.username}">
-                    <a class="btn btn-outline-secondary"
-                       th:href="@{|/post/modify/${post.id}|}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
-                            <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"></path>
-                        </svg>
-                        <span class="visually-hidden">삭제</span>
-                    </a>
-                </div>
-
-
                 <!--본인에게만 접근이 가능함-->
-                <a th:href="@{|/post/modify/${post.id}|}" th:text="수정"
+                <a class="btn btn-primary" th:href="@{|/post/modify/${post.id}|}"
                    sec:authorize="isAuthenticated() and hasAuthority('ROLE_USER')"
                    th:if="${post.author != null and #authentication.getPrincipal().getUsername() == post.author
              .username}">
+                    <span>수정</span>
                 </a>
-
 
                 <!-- 어드민만 접근가능 -->
                 <a class="btn btn-primary"
                    th:href="@{|/post/modify/${post.id}|}"
                    sec:authorize="isAuthenticated() and hasAuthority('ROLE_ADMIN')">
-                    <i class="bi bi-pencil-square"></i>
+                    <span>수정</span>
                 </a>
 
-
                 <!--본인에게만 접근이 가능함 -->
-                <a th:href="@{|/post/delete/${post.id}|}" th:text="삭제"
+                <a class="btn btn-primary"th:href="@{|/post/delete/${post.id}|}" th:text="삭제"
                    sec:authorize="isAuthenticated() and hasAuthority('ROLE_USER')"
                    th:if="${post.author != null and #authentication.getPrincipal().getUsername() == post.author
          .username}" >
+                    <span>삭제</span>
                 </a>
 
                 <!-- 어드민만 접근가능 /|post/delete/{id}"-->
-                <a th:href="@{|/post/delete/${post.id}|}" th:text="삭제"
+                <a class="btn btn-primary" th:href="@{|/post/delete/${post.id}|}" th:text="삭제"
                    sec:authorize="isAuthenticated() and hasAnyAuthority('ROLE_ADMIN')">
-
+                    <span>삭제</span>
                 </a>
 
             </div><!-- 수정/ 추천버튼 기능끝-->
@@ -149,7 +123,7 @@
     <!--댓글시작-->
     <div class="m-5 ">
         <div>
-            <h2 class="ml-3">댓글</h2>
+            <h2 class="ml-3">댓글목록</h2>
         </div>
         <ul>
             <div class="border-top border-bottom border-dark"
@@ -164,6 +138,7 @@
                 </div>
                 <div class="mb-3"
                      th:text="${answer.content}"></div>
+
             </div>
         </ul>
     </div><!--댓글끝시작-->

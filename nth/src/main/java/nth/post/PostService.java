@@ -28,16 +28,17 @@ public class PostService {
         return this.postRepository.findAll();
     }
 
+//    public List<Post> getfreeList() {
+//        return (List<Post>) postRepository.findFreePosts();
+//    }
+
     /**
      * 등록순
      *
      * @param page
      * @return
      */
-    public Page<Post> getList1(int page) {
-        Pageable pageable = PageRequest.of(page, 10);
-        return this.postRepository.findAll(pageable);
-    }
+
 
     /**
      * 작성시간순
@@ -55,8 +56,16 @@ public class PostService {
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
         Specification<Post> specification = search(kw);
         return this.postRepository.findAll(specification, pageable);
-
     }
+
+    public Page<Post> getfreeList(int page,String kw) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate")); //작성시간순
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        Specification<Post> specification = search(kw);
+        return postRepository.findFreePosts(specification, pageable);
+    }
+
 
     /**
      * @parm id 값을 받아와서 화면에 상세보기
@@ -71,16 +80,20 @@ public class PostService {
     }
 
     /**
-     * 유저 정보 까지 저장
      *
-     * @param 제목
-     * @param 내용
+     * 제목
+     * 내용
+     * 카테고리
+     * 유저정보
+     *
+     *
      */
-    public void create(String s, String c, UserInfo userInfo) {
+    public void create(String subject, String content,Category category,UserInfo userInfo) {
         Post post = new Post();
-        post.setSubject(s);
-        post.setContent(c);
+        post.setSubject(subject);
+        post.setContent(content);
         post.setAuthor(userInfo);
+        post.setCategory(category); // 카테고리 설정
         post.setCreateDate(LocalDateTime.now());
         this.postRepository.save(post);
     }
@@ -95,6 +108,7 @@ public class PostService {
     public void delete(Post post) {
         this.postRepository.delete(post);
     }
+
 
     /**
      * @param post : 질문내역

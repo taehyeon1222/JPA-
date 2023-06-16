@@ -34,8 +34,10 @@ public class AnswerController {
                                HttpServletRequest request){
         UserInfo userInfo = this.userInfoService.getUser(principal.getName());
         Post post = this.postService.getPost(id);
+
         HttpSession session = request.getSession();
         String userId = (String) session.getAttribute("userId");
+
         if(bindingResult.hasErrors()){
             model.addAttribute("post", post);
             return "post/list_d";

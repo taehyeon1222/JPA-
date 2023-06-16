@@ -11,10 +11,12 @@ import org.springframework.stereotype.Component;
 public class DataInitializer implements CommandLineRunner {
     // 데이터 초기설정 엔티티 및 웹이 구동될때마다 자동실행됨
 
+
     private final CategoryRepository categoryRepository;
     @Override
     public void run(String... args) throws Exception {
 
+        /*
         if(categoryRepository.findByName("공지사항").isEmpty()){
             System.out.println("*********자동실행됨*******");
             System.out.println("*********엔티티 생성후*******");
@@ -28,6 +30,8 @@ public class DataInitializer implements CommandLineRunner {
             System.out.println("*********공지사항 카테고리 생성*******");
             System.out.println("*********자유게시판 카테고리 생성함*******");
             // 공지사항이 없으면 자유게시판도 없음
+
+         */
         }
 
 
@@ -49,4 +53,4 @@ public class DataInitializer implements CommandLineRunner {
     }
 
 
-}
+

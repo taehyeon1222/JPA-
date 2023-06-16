@@ -41,7 +41,7 @@ public class Post {
     @ManyToOne
     private UserInfo author;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL ,fetch = FetchType.LAZY)
     private Category category; //카테고리 지정
 
     @ManyToMany

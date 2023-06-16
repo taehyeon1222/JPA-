@@ -4,6 +4,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import nth.DataNotFoundException;
+import nth.MyUtile;
+import nth.post.Category;
 import nth.post.Post;
 import nth.post.PostForm;
 import nth.post.PostService;
@@ -33,6 +35,8 @@ public class PostController {
 
     private final PostService postService;
     private final UserInfoService userInfoService;
+    private final MyUtile myUtile;
+
 
     @GetMapping("/list")
     public String list(HttpServletRequest request,Principal principal,Model model,
@@ -40,17 +44,18 @@ public class PostController {
                        @RequestParam(value = "kw",defaultValue = "") String kw) {
 
         Page<Post> paging = this.postService.getList(page,kw);//키워드 추가
+        //Page<Post> paging = this.postService.getfreeList(page, kw);
         model.addAttribute("paging", paging); // paging 추가
         model.addAttribute("kw", kw); // 검색기능 추가
 
         // 유저 정보를 가져와서 닉네임 추가를 해주기 위함
-        addUserInfoNiname(model,principal); //닉네임 추가
+        myUtile.addUserInfoNiname(model,principal); //닉네임 추가
         return "post/list";
     }
 
     @GetMapping("/post/detail/{id}")
     public String listjoin(Model model,Principal principal, @PathVariable("id") Long id) {
-        addUserInfoNiname(model,principal);
+        myUtile.addUserInfoNiname(model,principal);
         Post post = this.postService.getPost(id);
         model.addAttribute("post", post);
         return "post/list_d";
@@ -60,7 +65,7 @@ public class PostController {
     @GetMapping ("/post_form")
     public String postCreate(PostForm postForm,Model model,Principal principal){
         model.addAttribute("postForm",postForm);;
-        addUserInfoNiname(model,principal);
+        myUtile.addUserInfoNiname(model,principal);
         return "post/post_form";
     }
 
@@ -73,7 +78,9 @@ public class PostController {
             return "post/post_form";
         }
         UserInfo userInfo = this.userInfoService.getUser(principal.getName());
-        this.postService.create(postForm.getSubject(), postForm.getContent(),userInfo);
+        Category category = new Category();
+        category.setName("notice"); // 카테고리를 지정
+        this.postService.create(postForm.getSubject(), postForm.getContent(),category,userInfo);
         return "redirect:/list";
     }
 
@@ -85,12 +92,12 @@ public class PostController {
             , Principal principal){
         Post post = this.postService.getPost(id);
 
-        if (checkAdmin(principal)) { //어드민 수정
+        if (myUtile.checkAdmin(principal)) { //어드민 수정
             postForm.setSubject(post.getSubject());
             postForm.setContent(post.getContent());
             //throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"관리자권한입니다.");
         } else {// 유저닉네임 및 권한체크
-            checkPermission(post, principal.getName());
+            myUtile.checkPermission(post, principal.getName());
         }
          postForm.setSubject(post.getSubject());
          postForm.setContent(post.getContent());
@@ -107,13 +114,13 @@ public class PostController {
         }
         Post post = this.postService.getPost(id);
 
-        if (checkAdmin(principal)){
+        if (myUtile.checkAdmin(principal)){
             this.postService.modify(post, postForm.getSubject(),
                     postForm.getContent());
             return String.format("redirect:/post/detail/%s", id);
         }
 
-        checkPermission(post, principal.getName()); // 유저 권한체크
+        myUtile.checkPermission(post, principal.getName()); // 유저 권한체크
         this.postService.modify(post, postForm.getSubject(),
                 postForm.getContent());
         return String.format("redirect:/post/detail/%s", id);
@@ -124,12 +131,12 @@ public class PostController {
         public String postDelete(Principal principal,@PathVariable("id") long id){
             Post post = this.postService.getPost(id);
 
-        if (checkAdmin(principal)) {
+        if (myUtile.checkAdmin(principal)) {
             System.out.println("어드민 권한이 발생함");
             this.postService.delete(post);
             return "redirect:/";
         }
-        checkPermission(post, principal.getName());
+        myUtile.checkPermission(post, principal.getName());
         this.postService.delete(post);
         return "redirect:/";
          }
@@ -142,52 +149,44 @@ public class PostController {
             this.postService.vote(post,userInfo);
             return  String.format("redirect:/post/detail/%s",id);
         }
-    /**
-     *
-     * @param model
-     * @param principal
-     * @return 회원가입창으로 리턴
-     * 모델과 유저정보를 받고 유저가 없을 경우 회원가입창으로 보냄
-     * 혹은 유저닉네임을 표시하기 위해 필요한 메서드
-     *
-     */
-    private String addUserInfoNiname(Model model, Principal principal) {
-        if (principal != null) {
-            try {
-                UserInfo userInfo = userInfoService.getUser(principal.getName());
-                model.addAttribute("userInfo", userInfo);
-            } catch (DataNotFoundException e) {
-                System.out.println("처음 실행 시 유저가 없어서 오류 발생");
 
-                return "redirect:/user/signup";
-            }
-        }
-        return "redirect:/user/signup";
-    }
-
-    /**
-     *
-     * @param post : Post post = this.postService.getPost(id) 를 담고 있어야함
-     * @param username  : principal.getName  를 담고 있어야함
-     *<br>
-     * 유저의 아이디와 작성 된 유저아이디를 체크
-     */
-    private void checkPermission(Post post, String username) {
-        if (!post.getAuthor().getUsername().equals(username)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "권한이 없습니다.");
-            //이후 에러메시지 말고 다른 방식으로 구현할것 생각하기.
-        }
-    }
-
-    /**
-     * 관리자 권한체크
-     * @return 반환값 어드민인경우 트루
-     */
-    private boolean checkAdmin(Principal principal){
-        return  SecurityContextHolder.getContext().getAuthentication().isAuthenticated() &&
-                SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains
-                        (new SimpleGrantedAuthority("ROLE_ADMIN"));
-    }
+//    private String addUserInfoNiname(Model model, Principal principal) {
+//        if (principal != null) {
+//            try {
+//                UserInfo userInfo = userInfoService.getUser(principal.getName());
+//                model.addAttribute("userInfo", userInfo);
+//            } catch (DataNotFoundException e) {
+//                System.out.println("처음 실행 시 유저가 없어서 오류 발생");
+//
+//                return "redirect:/user/signup";
+//            }
+//        }
+//        return "redirect:/user/signup";
+//    }
+//
+//    /**
+//     *
+//     * @param post : Post post = this.postService.getPost(id) 를 담고 있어야함
+//     * @param username  : principal.getName  를 담고 있어야함
+//     *<br>
+//     * 유저의 아이디와 작성 된 유저아이디를 체크
+//     */
+//    private void checkPermission(Post post, String username) {
+//        if (!post.getAuthor().getUsername().equals(username)) {
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "권한이 없습니다.");
+//            //이후 에러메시지 말고 다른 방식으로 구현할것 생각하기.
+//        }
+//    }
+//
+//    /**
+//     * 관리자 권한체크
+//     * @return 반환값 어드민인경우 트루
+//     */
+//    private boolean checkAdmin(Principal principal){
+//        return  SecurityContextHolder.getContext().getAuthentication().isAuthenticated() &&
+//                SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains
+//                        (new SimpleGrantedAuthority("ROLE_ADMIN"));
+//    }
 
 }
 
