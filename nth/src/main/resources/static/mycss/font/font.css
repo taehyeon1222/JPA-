@@ -1,0 +1,7 @@
+@import url('https://fonts.googleapis.com/css?family=Black+Han+Sans:400');
+@import url('https://fonts.googleapis.com/css?family=Black+Han+Sans&display=swap&subset=korean');
+
+.my-custom-font {
+    font-family: 'Black Han Sans', sans-serif;
+    /* 폰트 관련 추가 스타일을 여기에 작성 */
+}

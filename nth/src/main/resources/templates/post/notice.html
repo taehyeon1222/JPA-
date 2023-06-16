@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<link xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+
+</head>
+<header>
+  <div th:replace="layout/navbar :: content"></div>
+</header>
+
+
+<body>
+
+<div class="p-3 row">
+  <div class=" input-group mb-3 d-flex justify-content-content">
+    <form  class="input-group col-11"
+           th:action="@{/list}" method="get" id="searchForm">
+      <input class="form-control"
+             type="text" id="kw"
+             name="kw" th:value="${kw}"
+             placeholder="제목으로 검색"   aria-label="Recipient's username" aria-describedby="button-addon2">
+      <input type="hidden" id="page" name="page" th:value="${paging.number}">
+
+      <input class="boxed-btn3 btn btn-outline-secondary"
+             type="submit" id="button-addon2" value="검색" >
+
+    </form>
+    <a class="boxed-btn3 m-2 d-flex justify-content-center " th:href="@{/post_form}">게시글작성</a>
+  </div>
+
+</div>
+
+
+<div>
+
+  <table class="table">
+    <thead class="table-dark">
+
+    <tr>
+      <th>번호</th>
+      <th>제 목</th>
+      <th>작성자 </th>
+      <th>작 성 일 시</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="post, loop : ${paging}">
+      <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index }"></td>
+      <td>
+        <a th:href="@{|/post/detail/${post.id}|}" th:text="${post.subject}"> </a>
+        <span class="text-danger" small ms-2
+              th:if="${#lists.size(post.answerList) >0}"
+              th:text="${#lists.size(post.answerList)}">
+                </span>
+      </td>
+      <td>
+        <span th:if="${post.author != null}"th:text="${post.author.username}"></span>
+      </td>
+      <td th:text="${#temporals.format(post.createDate,'yy년M월dd일 HH시mm분')}"></td>
+    </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<!-- 검색 -->
+
+
+
+<!-- 페이징 처리-->
+<!-- 페 이 징 처 리 시 작 -->
+<div class="blog-pagination justify-content-center d-flex mb-55 m-0"
+     th:if="${!paging.isEmpty()}">
+
+  <ul class="pagination">
+    <!--맨앞-->
+    <li class="page-item">
+      <a class="page-link" th:href="@{|?page=${paging.number*0}|}">
+        <i class="ti-angle-double-left"></i>
+      </a>
+    </li>
+
+
+    <!--이전-->
+    <li class="page-item"
+        th:classappend="${!paging.hasPrevious} ? 'disabled'">
+      <a class="page-link" th:href="@{|?page=${paging.number-1}|}">
+        <i class="ti-angle-left"></i>
+      </a>
+    </li>
+
+
+    <li class="page-item active"
+        th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
+        th:if="${page >= paging.number-5 and page <= paging.number+5}"
+        th:classappend="${page == paging.number} ? 'active'">
+      <!-- 기존코드에 kw 값을 더함. 검색기능
+      <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a> -->
+      <a class="page-link" th:text="${page}"  th:href="@{|?page=${page}&kw=${kw}|}"></a>
+    </li>
+
+
+    <!--다음페이지 -->
+    <li class="page-item active" th:classappend="${!paging.hasNext} ? 'disabled'">
+      <a class="page-link" th:href="@{|?page=${paging.number+1}|}">
+        <i class="ti-angle-right"></i>
+      </a>
+    </li>
+
+    <!--끝으로-->
+    <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
+      <a class="page-link" th:href="@{|?page=${paging.totalPages-1}|}">
+        <i class="ti-angle-double-right"></i>
+      </a>
+    </li>
+
+
+  </ul>
+
+</div>
+
+
+<!-- 페 이 징 처 리 끝 -->
+
+</body>
+
+</html>
