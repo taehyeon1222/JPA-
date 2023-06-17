@@ -33,7 +33,7 @@ public class HomeController {
                        @RequestParam(value = "kw", defaultValue = "") String kw) {
 
 
-        Page<Post> paging1 = this.postService.getListkw(page,5,kw,"공지");
+        Page<Post> paging1 = this.postService.getListkws(page,5,"공지");
         model.addAttribute("paging1", paging1); // paging 추가
 
         //Page<Post> paging2 = this.postService.getListVoter(kw,"자유", LocalDateTime.now(),page);

@@ -24,9 +24,9 @@ public class PostService {
 
     private final PostRepository postRepository;
 
-    public List<Post> getList() {
-        return this.postRepository.findAll();
-    }
+//    public List<Post> getList() {
+//        return this.postRepository.findAll();
+//    }
 
 //    public Page<Post> getListVoter(String kw,String category,LocalDateTime time,int page) {
 //        List<Sort.Order> sorts1 = new ArrayList<>();
@@ -48,7 +48,7 @@ public class PostService {
         List<Sort.Order> sorts1 = new ArrayList<>();
         sorts1.add(Sort.Order.desc("createDate")); //작성시간순
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts1));
-        return this.postRepository.findAllByKeyword(kw,category,pageable);
+        return this.postRepository.findAllByKeyword(kw,pageable);
     }
     /**
      *
@@ -59,13 +59,18 @@ public class PostService {
      * @return 검색기능제공 10 개 단위로 페이징중
      */
 
-    public Page<Post> getListkw(int page,int size,String kw,String category) {
+//    public Page<Post> getListkw(int page,int size,String kw,String category) {
+//        List<Sort.Order> sorts1 = new ArrayList<>();
+//        sorts1.add(Sort.Order.desc("createDate")); //작성시간순
+//        Pageable pageable = PageRequest.of(page, size, Sort.by(sorts1));
+//        return this.postRepository.findAllByKeyword(kw,category,pageable);
+//    }
+    public Page<Post> getListkws(int page,int size,String category) {
         List<Sort.Order> sorts1 = new ArrayList<>();
         sorts1.add(Sort.Order.desc("createDate")); //작성시간순
         Pageable pageable = PageRequest.of(page, size, Sort.by(sorts1));
-        return this.postRepository.findAllByKeyword(kw,category,pageable);
+        return this.postRepository.findAllByKeyword(category,pageable);
     }
-
 
 
     /**

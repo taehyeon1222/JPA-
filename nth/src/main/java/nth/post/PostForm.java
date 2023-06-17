@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 public class PostForm {
 
+    @Size(max = 20,message = "제목은 20자 이하 1글자 이상으로 작성해주세요")
     @NotBlank(message = "제목은 필수 입니다.")
     private String subject;
 

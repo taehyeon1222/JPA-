@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<link xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+
+
+
+<th:block th:fragment="listup">
+  <table class="w-100">
+    <tbody class="border-bottom"
+           th:each="post, loop : ${paging}" >
+    <tr>
+      <td colspan="3"><!--제목-->
+        <a style="font-size: 15px; font-weight: bold;" th:href="@{|/post/detail/${post.id}|}" th:text="${post.subject}"> </a>
+        <span class="text-danger"
+              th:if="${#lists.size(post.answerList) >0}"
+              th:text="${#lists.size(post.answerList)}">
+                </span>
+      </td><!--제목-->
+      <td th:text="${#temporals.format(post.createDate,'yy.M.dd//HH:mm')}"> 날짜가 들어가요</td>
+
+    </tr>
+    <tr>
+      <td colspan="2">
+              <span th:if="${post.author != null}"
+                    th:text="${post.author.nickname}"></span>
+        <span style="font-size: 5px"
+              th:if="${post.author != null}"th:text="${'('+post.author.username+')'}">
+                </span></td>
+      <td><span th:if="${post.author != null}"th:text="${#lists.size(post.voter)}"></span></td>
+      <td>1000</td>
+    </tr>
+    </tbody>
+  </table>
+
+</th:block>
+<!-- 페 이 징 처 리 끝 -->
+
+
+</html>
