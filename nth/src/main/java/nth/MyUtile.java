@@ -47,15 +47,17 @@ public class MyUtile {
      * @param post : Post post = this.postService.getPost(id) 를 담고 있어야함
      * @param username  : principal.getName  를 담고 있어야함
      *<br>
-     * 유저의 아이디와 작성 된 유저아이디를 체크
+     * 유저의 아이디와 작성 된 유저아이디를 체크후 에러발생
      */
-    public void checkPermission(Post post, String username) {
+    public void checkPermission(Model model,Post post, String username) {
         if (!post.getAuthor().getUsername().equals(username)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "권한이 없습니다.");
-            //이후 에러메시지 말고 다른 방식으로 구현할것 생각하기.
+            model.addAttribute("ero", "권한이없습니다.");
+            //throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "권한이 없습니다.");
         }
     }
-
+    public boolean checkUsername(Post post, String username) {
+               return post.getAuthor().getUsername().equals(username);
+    }
     /**
      * 관리자 권한체크
      * @return 반환값 어드민인경우 트루

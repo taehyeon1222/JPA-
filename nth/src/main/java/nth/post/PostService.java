@@ -28,43 +28,44 @@ public class PostService {
         return this.postRepository.findAll();
     }
 
-//    public List<Post> getfreeList() {
-//        return (List<Post>) postRepository.findFreePosts();
+//    public Page<Post> getListVoter(String kw,String category,LocalDateTime time,int page) {
+//        List<Sort.Order> sorts1 = new ArrayList<>();
+//        sorts1.add(Sort.Order.desc("voter.size"));
+//        Sort sort = Sort.by(sorts1);
+//        //sorts1.add(Sort.Order.desc("createDate")); //작성시간순
+//        Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts1));
+//        return this.postRepository.findAllByVoter(kw,category,time,pageable);
 //    }
 
     /**
-     * 등록순
      *
      * @param page
-     * @return
+     * @param kw
+     * @param category
+     * @return 검색기능제공 10 개 단위로 페이징중
      */
-
-
+    public Page<Post> getListkw(int page, String kw,String category) {
+        List<Sort.Order> sorts1 = new ArrayList<>();
+        sorts1.add(Sort.Order.desc("createDate")); //작성시간순
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts1));
+        return this.postRepository.findAllByKeyword(kw,category,pageable);
+    }
     /**
-     * 작성시간순
      *
-     * @param page : 페이징
-     * @param kw   : kw 문자열 형태
-     *             <p>
-     *             page : 페이징 @RequestParam(value = "page",defaultValue = "0")
-     *             int page
-     * @return this.postRepository.findAll(pageable);
+     * @param page
+     * @param kw
+     * @param category
+     * @param size : 사이즈 조절
+     * @return 검색기능제공 10 개 단위로 페이징중
      */
-    public Page<Post> getList(int page, String kw) {
-        List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.desc("createDate")); //작성시간순
-        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
-        Specification<Post> specification = search(kw);
-        return this.postRepository.findAll(specification, pageable);
+
+    public Page<Post> getListkw(int page,int size,String kw,String category) {
+        List<Sort.Order> sorts1 = new ArrayList<>();
+        sorts1.add(Sort.Order.desc("createDate")); //작성시간순
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sorts1));
+        return this.postRepository.findAllByKeyword(kw,category,pageable);
     }
 
-    public Page<Post> getfreeList(int page,String kw) {
-        List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.desc("createDate")); //작성시간순
-        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
-        Specification<Post> specification = search(kw);
-        return postRepository.findFreePosts(specification, pageable);
-    }
 
 
     /**
@@ -78,6 +79,7 @@ public class PostService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "post not found");
         }
     }
+
 
     /**
      *
@@ -123,33 +125,8 @@ public class PostService {
 
 
 
-    /**
-     * @Parm kw: 키워드
-     */
-    private Specification<Post> search(String kw) {
-        return new Specification<>() {
-            private static final long serialVersionUID = 1L;
 
-            @Override
-            public Predicate toPredicate(Root<Post> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-                query.distinct(false); // 중복을 제거
-                Join<Post, UserInfo> u1 = root.join("author", JoinType.LEFT); //
-                Join<Post, Answer> a = root.join("answerList", JoinType.LEFT);
-                Join<Answer, UserInfo> u2 = a.join("author", JoinType.LEFT);
-                return criteriaBuilder.or(
-                        criteriaBuilder.isNull(u1.get("username")),
-                        criteriaBuilder.like(u1.get("username"), "%" + kw + "%"));
-            }
-        };
-    }
+
 }
 
-
-
-//criteriaBuilder.or(criteriaBuilder.like(root.get("subject"),"%"+kw+"%"),//제목
-// criteriaBuilder.like(root.get("content"),"%"+kw+"%"), //내용
-//criteriaBuilder.like(u1.get("username"),"%"+kw+"%"),//질문
-
-// criteriaBuilder.like(a.get("content"),"%"+kw+"%"), //답변
-// criteriaBuilder.like(u2.get("username"),"%"+kw+"%")); //답변
 

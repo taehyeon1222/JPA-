@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<link xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+
+</head>
+<header>
+    <div th:replace="layout/navbar :: content"></div>
+</header>
+<div>
+
+</div>
+
+<body>
+
+<div class="p-3 row">
+    <div class=" input-group mb-3 d-flex justify-content-content">
+        <form  class="input-group col-11"
+               th:action="@{/free}" method="get" id="searchForm">
+            <input class="form-control"
+                   type="text" id="kw"
+                   name="kw" th:value="${kw}"
+                   placeholder="제목으로 검색"   aria-label="Recipient's username" aria-describedby="button-addon2">
+            <input type="hidden" id="page" name="page" th:value="${paging.number}">
+
+            <input class="boxed-btn3 btn btn-outline-secondary"
+                   type="submit" id="button-addon2" value="검색" >
+        </form>
+        <a class="boxed-btn3 m-2 d-flex justify-content-center " th:href="@{/post_form}">게시글작성</a>
+    </div>
+</div>
+
+<div th:replace="layout/list :: list"></div>
+
+</body>
+
+</html>

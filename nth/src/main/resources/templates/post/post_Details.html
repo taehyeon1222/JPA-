@@ -11,6 +11,9 @@
 </header>
 
 <body>
+<div>
+    <span th:text="${err}"></span>
+</div>
 <!--전체시작-->
 <div class="m-5">
 
@@ -62,7 +65,7 @@
                     <path d="M5 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM5.5 7a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9zm0 4a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9z"></path>
                     <path fill-rule="evenodd" d="M1.5 7a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H2a.5.5 0 0 1-.5-.5V7zM2 7h1v1H2V7zm0 3.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5H2zm1 .5H2v1h1v-1z"></path>
                 </svg>
-                <span class="visually-hidden">리스트</span>
+                <a href="/list" class="visually-hidden">리스트</a>
             </button>
         </div><!--왼쪽끝시작-->
 
@@ -134,7 +137,6 @@
                     <span th:if="${answer.author != null}" th:text="${'('+answer.author.username+')'}"></span>
 
                     <span th:text="${#temporals.format(answer.createDate,'yy/M/dd HH시mm분')}"> </span>
-
                 </div>
                 <div class="mb-3"
                      th:text="${answer.content}"></div>

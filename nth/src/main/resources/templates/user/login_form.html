@@ -11,7 +11,9 @@
     id 와 비밀번호를 확인해주세요.
   </div>
 </div>
-
+<div>
+  <span th:text="${err}"></span>
+</div>
 <div class="d-flex justify-content-center con_box brd " >
 <form class="w-50 "
       th:action="@{/user/login}" method="post">

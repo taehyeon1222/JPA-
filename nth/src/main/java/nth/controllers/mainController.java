@@ -8,7 +8,7 @@ public class mainController {
 
     @GetMapping("/")
     public String root(){
-        return "redirect:/list";
+        return "redirect:/home";
     }
 
     @GetMapping("/layout")
@@ -16,10 +16,7 @@ public class mainController {
         return "layout/navbar";
     }
 
-    @GetMapping("/hi2")
-    public String root2(){
-        return "elements";
-    }
+
 
 
 }

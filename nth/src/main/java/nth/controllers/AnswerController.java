@@ -10,6 +10,7 @@ import nth.post.Post;
 import nth.post.PostService;
 import nth.user.UserInfo;
 import nth.user.UserInfoService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,24 +29,20 @@ public class AnswerController {
 
     //작성자 저장
     @PostMapping("/post/create/{id}")
+    //@PreAuthorize("isAuthenticated()")
     public String createAnswer(Model model, @PathVariable("id") long id,
                                @Valid AnswerForm answerForm, BindingResult
-                                           bindingResult, Principal principal,
-                               HttpServletRequest request){
+                                           bindingResult, Principal principal){
+        if(principal == null){
+            model.addAttribute("err","로그인후이용해주세요"); //실행안됨
+            return "user/login_form";
+        }
         UserInfo userInfo = this.userInfoService.getUser(principal.getName());
         Post post = this.postService.getPost(id);
 
-        HttpSession session = request.getSession();
-        String userId = (String) session.getAttribute("userId");
-
         if(bindingResult.hasErrors()){
             model.addAttribute("post", post);
-            return "post/list_d";
-        }
-        if(principal == null){
-            System.out.println("널");
-            return "post/list";
-
+            return "post/post_Details";
         }
 
         //this.answerService.create(post, answerForm.getContent());

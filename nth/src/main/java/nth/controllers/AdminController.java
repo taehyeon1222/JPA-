@@ -26,7 +26,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AdminController {
 
-
+    //개발 일시중단
     private final BookService bookService;
     private final CertificationInfoService certificationInfoService;
 
@@ -60,7 +60,6 @@ public String bookConfigCreate(@ModelAttribute("bookDTO") @Valid BookDTO bookDTO
             model.addAttribute("books", books);
             return "admin/admin_book_config";
         }
-
         try{
             Book book = bookService.create(bookDTO);
             certificationInfoService.create(bookDTO,book);
