@@ -11,7 +11,6 @@
   <div th:replace="layout/navbar :: content"></div>
 </header>
 
-
 <div class="m-5 d-flex justify-content-start">
   <!--공지사항-->
   <div class="w-50 m-3">
@@ -22,7 +21,6 @@
         <span>공지사항</span>
       </font></font>
       </div>
-
       <div class="card-body bg-white text-black m-1 p-0">
         <table class="w-100">
           <tbody class="border-bottom"
@@ -36,7 +34,6 @@
                 </span>
             </td><!--제목-->
             <td th:text="${#temporals.format(post.createDate,'yy.M.dd//HH:mm')}"> 날짜가 들어가요</td>
-
           </tr>
           <tr>
             <td colspan="2">
