@@ -36,7 +36,7 @@ public class PostController {
                        @RequestParam(value = "page", defaultValue = "0") int page,
                        @RequestParam(value = "kw", defaultValue = "") String kw) {
 
-        Page<Post> paging = this.postService.getListkws(page,5,"자유"); // 카테고리에서 검색
+        Page<Post> paging = this.postService.getListkws(page,5,kw,"자유"); // 카테고리에서 검색
         model.addAttribute("paging", paging); // paging 추가
         model.addAttribute("kw", kw); // 검색기능 추가
 

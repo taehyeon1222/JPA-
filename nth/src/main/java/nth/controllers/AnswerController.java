@@ -34,7 +34,7 @@ public class AnswerController {
                                @Valid AnswerForm answerForm, BindingResult
                                            bindingResult, Principal principal){
         if(principal == null){
-            model.addAttribute("err","로그인후이용해주세요"); //실행안됨
+            model.addAttribute("err","로그인후이용해주세요");
             return "user/login_form";
         }
         UserInfo userInfo = this.userInfoService.getUser(principal.getName());

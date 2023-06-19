@@ -37,19 +37,15 @@ public class PostService {
 //        return this.postRepository.findAllByVoter(kw,category,time,pageable);
 //    }
 
-    /**
-     *
-     * @param page
-     * @param kw
-     * @param category
-     * @return 검색기능제공 10 개 단위로 페이징중
-     */
-    public Page<Post> getListkw(int page, String kw,String category) {
-        List<Sort.Order> sorts1 = new ArrayList<>();
-        sorts1.add(Sort.Order.desc("createDate")); //작성시간순
-        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts1));
-        return this.postRepository.findAllByKeyword(kw,pageable);
+
+
+    public Page<Post> getListvoter(int page) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate")); //작성시간순
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
+        return this.postRepository.voterDESC(pageable);
     }
+
     /**
      *
      * @param page
@@ -65,11 +61,11 @@ public class PostService {
 //        Pageable pageable = PageRequest.of(page, size, Sort.by(sorts1));
 //        return this.postRepository.findAllByKeyword(kw,category,pageable);
 //    }
-    public Page<Post> getListkws(int page,int size,String category) {
+    public Page<Post> getListkws(int page,int size,String kw,String category) {
         List<Sort.Order> sorts1 = new ArrayList<>();
         sorts1.add(Sort.Order.desc("createDate")); //작성시간순
         Pageable pageable = PageRequest.of(page, size, Sort.by(sorts1));
-        return this.postRepository.findAllByKeyword(category,pageable);
+        return this.postRepository.findAllByKeywords(kw,category,pageable);
     }
 
 

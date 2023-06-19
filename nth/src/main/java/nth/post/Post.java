@@ -38,10 +38,10 @@ public class Post {
     @OneToMany(mappedBy = "post" , cascade = CascadeType.REMOVE)
     private List<Answer> answerList;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private UserInfo author;
 
-    @ManyToOne(cascade = CascadeType.ALL ,fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL ,fetch = FetchType.LAZY)
     private Category category; //카테고리 지정
 
     @ManyToMany

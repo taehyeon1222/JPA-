@@ -33,12 +33,12 @@ public class HomeController {
                        @RequestParam(value = "kw", defaultValue = "") String kw) {
 
 
-        Page<Post> paging1 = this.postService.getListkws(page,5,"공지");
+        Page<Post> paging = this.postService.getListvoter(page);
+        Page<Post> paging1 = this.postService.getListkws(page,5,kw,"공지");
         model.addAttribute("paging1", paging1); // paging 추가
-
         //Page<Post> paging2 = this.postService.getListVoter(kw,"자유", LocalDateTime.now(),page);
-        //model.addAttribute("paging2", paging2); // paging 추가
-       // model.addAttribute("kw", kw); // 검색기능 추가
+        model.addAttribute("paging2", paging); // paging 추가
+        model.addAttribute("kw", kw); // 검색기능 추가
 
         // 유저 정보를 가져와서 닉네임 추가를 해주기 위함
         myUtile.addUserInfoNiname(model, principal); //닉네임 추가

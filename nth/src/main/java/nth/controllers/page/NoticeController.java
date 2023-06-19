@@ -41,7 +41,8 @@ public class NoticeController {
 
         // Page<Post> paging = this.postService.getList(page,kw);//키워드 추가
         //Page<Post> paging = this.postService.getNoticeList(page, kw); // 공지
-        Page<Post> paging = this.postService.getListkw(page,kw,"공지");
+       // Page<Post> paging = this.postService.getListkws(page,5,"공지");
+        Page<Post> paging = this.postService.getListkws(page,5,kw,"공지");
         model.addAttribute("paging", paging); // paging 추가
         model.addAttribute("kw", kw); // 검색기능 추가
 

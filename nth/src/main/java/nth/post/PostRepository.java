@@ -27,22 +27,28 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     // N+1 해결
     @EntityGraph(attributePaths = {"author", "category", "answerList", "answerList.author", "voter"})
-    @Query("SELECT p FROM Post p WHERE p.category.name = :categoryName")
+    @Query("SELECT p FROM Post p " +
+            "WHERE p.category.name = :categoryName")
     Page<Post> findAllByKeyword(@Param("categoryName") String categoryName, Pageable pageable);
 
 
+    @EntityGraph(attributePaths = {"author", "category", "answerList", "answerList.author", "voter"})
+    @Query("SELECT p FROM Post p " +
+            "WHERE (p.author.username " +
+            "LIKE %:kw% OR p.author.nickname " +
+            "LIKE %:kw% " +
+            "OR p.subject " +
+            "LIKE %:kw% " +
+            "OR p.content " +
+            "LIKE %:kw%) " +
+            "AND p.category.name = :categoryName")
+    Page<Post> findAllByKeywords(@Param("kw") String keyword, @Param("categoryName") String categoryName, Pageable pageable);
+////되는 코드
 
 
-//    @Query("SELECT p FROM Post p " +
-//            "WHERE (p.author.username " +
-//            "LIKE %:kw% OR p.author.nickname " +
-//            "LIKE %:kw% OR p.subject " +
-//            "LIKE %:kw% OR p.content " +
-//            "LIKE %:kw%) " +
-//            "AND p.category.name = :categoryName")
-//    Page<Post> findAllByKeyword(@Param("kw") String keyword, @Param("categoryName") String categoryName, Pageable pageable);
-
-
+    // 인기순 정렬
+    @Query("SELECT p FROM Post p WHERE p.category.name = '자유' ORDER BY size(p.voter) DESC")
+    Page<Post> voterDESC(Pageable pageable);
 
 
 

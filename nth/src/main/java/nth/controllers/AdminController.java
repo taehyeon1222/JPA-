@@ -26,7 +26,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AdminController {
 
-    //개발 일시중단
+    //개발 일시중단됨 *********************************************************************************
     private final BookService bookService;
     private final CertificationInfoService certificationInfoService;
 
