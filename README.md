@@ -7,10 +7,11 @@
 css는 부트스트랩을 이용하여 직접 여러 사이트를 방문하여 커스터마이징 하였습니다.
 * #### 개발기간 : 2023.05.18 ~ 2023.06.18
 * #### 개발 인원 : 1명(노태현)
-* ####  개발환경
-JAVA 19.02
-JDK 20
-
+* #### 개발 언어: JAVA 19.02
+* #### 백엔드 개발 환경: SpringBoot 3.0.5, IntelliJ IDEA, jpa(Spring Data JPA), Spring Security ,oracle(22.3.3)
+* #### 프론트 개발환경 : html5,thymeleaf, bootstrap template
+* #### 데이터 베이스: oracle(22.3.3)
+* #### 형상관리 : GitHub
 
 
 ### ⚙ 주요기능
