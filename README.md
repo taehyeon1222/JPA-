@@ -14,4 +14,4 @@
 JAVA 19.02
 JDK 20
 
-
+![ERD](https://github.com/taehyeon1222/JPA_board/assets/129807676/96443dff-d496-45b7-86ae-19e7f07538a5)
