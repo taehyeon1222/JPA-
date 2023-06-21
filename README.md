@@ -85,6 +85,13 @@ css는 부트스트랩을 이용하여 직접 여러 사이트를 방문하여 �
 <br>
 회원가입에서는 아이디가 중복될 경우 에러메세지를 보여준다.
 
+API 설계
+
+![캡처](https://github.com/taehyeon1222/JPA_board/assets/129807676/8b4aafe7-fa1b-4427-af99-475c862dd92b)
+
+![2](https://github.com/taehyeon1222/JPA_board/assets/129807676/b787983d-bdeb-4d5d-a184-b12604b2cac0)
+
+![3](https://github.com/taehyeon1222/JPA_board/assets/129807676/0a95e6c2-4354-4458-a804-bc9b6720d172)
 
 # 💭프로젝트후기
 
