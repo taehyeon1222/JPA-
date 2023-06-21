@@ -69,19 +69,18 @@ css는 부트스트랩을 이용하여 직접 여러 사이트를 방문하여 �
 
 
 <img src="https://github.com/taehyeon1222/JPA_board/assets/129807676/90966bcd-0a1f-44d1-bbd3-2d53df4a0015" width="500" height="300">
-
-
+<br>
 메인화면에서는 최근 공지사항과 인기글을 순위별로 모아서 볼 수 있도록 하였다.
 
-
 <img src="https://github.com/taehyeon1222/JPA_board/assets/129807676/f677cd48-8997-4a73-83ae-c5d227b31765)" width="500" height="300">
-
+<br>
 자유게시판에서는 카테고리가 자유인 게시글만 볼 수 있으며 검색시 자유게시판글만 검색이 가능하다.
 
 <img src="https://github.com/taehyeon1222/JPA_board/assets/129807676/f1fd3595-fbbe-4d45-ac7c-9a360988c637" width="500" height="300">
+<br>
 로그인 페이지 권한이 없는 경우 로그인페이지로 이동시켜주며, 에러메세지를 보여준다
-
 <img src="https://github.com/taehyeon1222/JPA_board/assets/129807676/c6037467-af0d-4192-ac69-eff54884f34c" width="500" height="300">
+<br>
 
 # 🔨 기능
 
