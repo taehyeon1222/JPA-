@@ -68,7 +68,8 @@ css는 부트스트랩을 이용하여 직접 여러 사이트를 방문하여 �
 
 
 
-![main](https://github.com/taehyeon1222/JPA_board/assets/129807676/90966bcd-0a1f-44d1-bbd3-2d53df4a0015)
+<img src="https://github.com/taehyeon1222/JPA_board/assets/129807676/90966bcd-0a1f-44d1-bbd3-2d53df4a0015" width="500" height="300">
+
 
 메인화면에서는 최근 공지사항과 인기글을 순위별로 모아서 볼 수 있도록 하였다.
 
