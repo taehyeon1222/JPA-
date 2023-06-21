@@ -66,13 +66,16 @@ css는 부트스트랩을 이용하여 직접 여러 사이트를 방문하여 �
 
 # 🧹 화면설계
 
-이미지
 
-이미지
 
-이미지
+![main](https://github.com/taehyeon1222/JPA_board/assets/129807676/90966bcd-0a1f-44d1-bbd3-2d53df4a0015)
 
-이미지
+
+![free](https://github.com/taehyeon1222/JPA_board/assets/129807676/f677cd48-8997-4a73-83ae-c5d227b31765)
+
+![3](https://github.com/taehyeon1222/JPA_board/assets/129807676/f1fd3595-fbbe-4d45-ac7c-9a360988c637)
+
+![2](https://github.com/taehyeon1222/JPA_board/assets/129807676/c6037467-af0d-4192-ac69-eff54884f34c)
 
 # 🔨 기능
 
