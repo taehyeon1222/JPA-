@@ -78,9 +78,9 @@ css는 부트스트랩을 이용하여 직접 여러 사이트를 방문하여 �
 
 자유게시판에서는 카테고리가 자유인 게시글만 볼 수 있으며 검색시 자유게시판글만 검색이 가능하다.
 
-![3](https://github.com/taehyeon1222/JPA_board/assets/129807676/f1fd3595-fbbe-4d45-ac7c-9a360988c637)
-
-![2](https://github.com/taehyeon1222/JPA_board/assets/129807676/c6037467-af0d-4192-ac69-eff54884f34c)
+<img src="https://github.com/taehyeon1222/JPA_board/assets/129807676/f1fd3595-fbbe-4d45-ac7c-9a360988c637" width="500" height="300">
+로그인 페이지 권한이 없는 경우 로그인페이지로 이동시켜주며, 
+<img src="https://github.com/taehyeon1222/JPA_board/assets/129807676/c6037467-af0d-4192-ac69-eff54884f34c" width="500" height="300">
 
 # 🔨 기능
 
