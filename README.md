@@ -71,21 +71,29 @@ css는 부트스트랩을 이용하여 직접 여러 사이트를 방문하여 �
 
 
 <img src="https://github.com/taehyeon1222/JPA_board/assets/129807676/90966bcd-0a1f-44d1-bbd3-2d53df4a0015" width="500" height="300">
+
 <br>
-메인화면에서는 최근 공지사항과 인기글을 순위별로 모아서 볼 수 있도록 하였다.
+
+메인화면에서는 최근 공지사항과 인기글을 순위별로 모아서 볼 수 있도록 하였습니다.
 
 <img src="https://github.com/taehyeon1222/JPA_board/assets/129807676/f677cd48-8997-4a73-83ae-c5d227b31765)" width="500" height="300">
+
 <br>
+
 자유게시판에서는 카테고리가 자유인 게시글만 볼 수 있으며 검색시 자유게시판글만 검색이 가능하다.
 
 <img src="https://github.com/taehyeon1222/JPA_board/assets/129807676/f1fd3595-fbbe-4d45-ac7c-9a360988c637" width="500" height="300">
+
 <br>
+
 로그인 페이지 권한이 없는 경우 로그인페이지로 이동시켜주며, 에러메세지를 보여준다
 <img src="https://github.com/taehyeon1222/JPA_board/assets/129807676/c6037467-af0d-4192-ac69-eff54884f34c" width="500" height="300">
+
 <br>
+
 회원가입에서는 아이디가 중복될 경우 에러메세지를 보여준다.
 
-API 설계
+# API 설계
 
 ![캡처](https://github.com/taehyeon1222/JPA_board/assets/129807676/8b4aafe7-fa1b-4427-af99-475c862dd92b)
 
@@ -100,7 +108,7 @@ API 설계
   또한 생각했던 부분 보다 많은 부분에서 예외처리 뿐만 아니라 여러 방향에서 생각해야할 것들이 많음을 느꼈습니다.
 
   
- > 시간과 관련된 부분 
+ > 시간과 관련된 부분
 + 프로젝트와 아르바이트를 병행하면서 작업을 하다보니 생각보다 시간이 많이 빠듯하다고 생각이들었습니다.
 또한 개발 초기단계에서 설계의 중요성을 느끼게되었습니다.
 초반 한달 이라는 정해진 시간내에서 내가 구현해 내지 못할 기능 까지 미리 틀을 만들어 두고 개발하다보니,
